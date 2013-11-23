@@ -69,6 +69,7 @@ namespace FFXIVAPP.Plugin.Event.Properties
                 var xRegEx = item.RegEx;
                 var xSound = item.Sound;
                 var xDelay = item.Delay;
+                var xCategory = item.Category;
                 var keyPairList = new List<XValuePair>
                 {
                     new XValuePair
@@ -80,6 +81,11 @@ namespace FFXIVAPP.Plugin.Event.Properties
                     {
                         Key = "Delay",
                         Value = xDelay.ToString(CultureInfo.InvariantCulture)
+                    },
+                    new XValuePair
+                    {
+                        Key = "Category",
+                        Value = xCategory
                     }
                 };
                 XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Event", xRegEx, keyPairList);

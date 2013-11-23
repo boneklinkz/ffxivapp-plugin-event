@@ -68,16 +68,19 @@ namespace FFXIVAPP.Plugin.Event
                     var xValue = (string) xElement.Element("Value");
                     var xSound = (string) xElement.Element("Sound");
                     var xDelay = (string) xElement.Element("Delay");
+                    var xCategory = (string)xElement.Element("Category");
                     if (String.IsNullOrWhiteSpace(xRegEx))
                     {
                         continue;
                     }
                     xSound = String.IsNullOrWhiteSpace(xSound) ? "aruba.wav" : String.IsNullOrWhiteSpace(xValue) ? xSound : xValue;
+                    xCategory = String.IsNullOrWhiteSpace(xCategory) ? "Miscellaneous" : xCategory;
                     var soundEvent = new SoundEvent
                     {
                         Sound = xSound,
                         Delay = 0,
-                        RegEx = xRegEx
+                        RegEx = xRegEx,
+                        Category = xCategory
                     };
                     int result;
                     if (Int32.TryParse(xDelay, out result))
@@ -97,6 +100,7 @@ namespace FFXIVAPP.Plugin.Event
         /// </summary>
         public static void ApplyTheming()
         {
+            ViewModels.MainViewModel.setupGrouping();
         }
     }
 }

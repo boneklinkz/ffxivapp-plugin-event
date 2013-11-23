@@ -13,6 +13,7 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
+        
         <x:Static x:Key="MainViewModel"
                   Member="ViewModels:MainViewModel.Instance" />
         <x:Static x:Key="PluginViewModel"
@@ -32,6 +33,13 @@
         <DockPanel Grid.Row="0"
                    Margin="3"
                    LastChildFill="True">
+            <Label VerticalContentAlignment="Center"
+                   Content="{Binding Locale[event_CategoryLabel],
+                                     Source={StaticResource PluginViewModel}}" />
+            <TextBox x:Name="TCategory"
+                     VerticalContentAlignment="Center"
+                     Text="{Binding Locale[event_SampleCategory],
+                                    Source={StaticResource PluginViewModel}}" Width="100" />
             <Label VerticalContentAlignment="Center"
                    Content="{Binding Locale[event_SoundLabel],
                                      Source={StaticResource PluginViewModel}}" />
@@ -67,7 +75,38 @@
                                             Source={StaticResource PluginViewModel}}"
                       SelectionMode="Single"
                       Utilities:SelectionBehavior.SelectionChanged="{Binding EventSelectionCommand}">
+                <DataGrid.GroupStyle>
+                    <!-- Style for groups at top level. -->
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Margin" Value="0,0,0,5"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                            <Expander IsExpanded="True" Background="#FF112255" BorderBrush="#FF002255" Foreground="#FFEEEEEE" BorderThickness="1,1,1,5">
+                                                <Expander.Header>
+                                                    <DockPanel>
+                                                        <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5,0,0,0" Width="100"/>
+                                                        <TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}"/>
+                                                    </DockPanel>
+                                                </Expander.Header>
+                                                <Expander.Content>
+                                                    <ItemsPresenter />
+                                                </Expander.Content>
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </DataGrid.GroupStyle>
                 <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Category}"
+                                        Header="{Binding Locale[event_CategoryHeader],
+                                                         Source={StaticResource PluginViewModel}}"
+                                        Utilities:GridViewSort.PropertyName="Category" />
                     <DataGridTextColumn Binding="{Binding Sound}"
                                         Header="{Binding Locale[event_SoundHeader],
                                                          Source={StaticResource PluginViewModel}}"
@@ -93,7 +132,7 @@
                     <Image Width="16"
                            Height="16"
                            RenderOptions.BitmapScalingMode="HighQuality"
-                           Source="/FFXIVAPP.Client;component/Resources/Media/Images/Refresh.png" />
+                           Source="/Media/Images/Refresh.png" />
                     <Label Content="Refresh Sound List"
                            Padding="3,0,3,0"
                            Visibility="{Binding EnableHelpLabels,
