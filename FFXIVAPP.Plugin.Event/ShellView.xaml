@@ -30,7 +30,7 @@
                         <Image Width="20"
                                Height="20"
                                RenderOptions.BitmapScalingMode="HighQuality"
-                               Source="/FFXIVAPP.Client;component/Resources/Media/Images/Main.png"
+                               Source="/FFXIVAPP.Plugin.Event;component/Media/Images/Main.png"
                                ToolTip="{Binding Locale[app_MainToolTip],
                                                  Source={StaticResource PluginViewModel}}" />
                         <Label Content="{Binding Locale[app_MainToolTip],
@@ -49,7 +49,7 @@
                         <Image Width="20"
                                Height="20"
                                RenderOptions.BitmapScalingMode="HighQuality"
-                               Source="/FFXIVAPP.Client;component/Resources/Media/Images/Settings.png"
+                               Source="/FFXIVAPP.Plugin.Event;component/Media/Images/Settings.png"
                                ToolTip="{Binding Locale[app_SettingsToolTip],
                                                  Source={StaticResource PluginViewModel}}" />
                         <Label Content="{Binding Locale[app_SettingsToolTip],
@@ -68,7 +68,7 @@
                         <Image Width="20"
                                Height="20"
                                RenderOptions.BitmapScalingMode="HighQuality"
-                               Source="/FFXIVAPP.Client;component/Resources/Media/Images/About.png"
+                               Source="/FFXIVAPP.Plugin.Event;component/Media/Images/About.png"
                                ToolTip="{Binding Locale[app_AboutToolTip],
                                                  Source={StaticResource PluginViewModel}}" />
                         <Label Content="{Binding Locale[app_AboutToolTip],
