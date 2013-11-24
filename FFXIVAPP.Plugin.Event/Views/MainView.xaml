@@ -93,7 +93,7 @@
                     <Image Width="16"
                            Height="16"
                            RenderOptions.BitmapScalingMode="HighQuality"
-                           Source="/FFXIVAPP.Client;component/Resources/Media/Images/Refresh.png" />
+                           Source="/FFXIVAPP.Plugin.Event;component/Media/Images/Refresh.png" />
                     <Label Content="Refresh Sound List"
                            Padding="3,0,3,0"
                            Visibility="{Binding EnableHelpLabels,
