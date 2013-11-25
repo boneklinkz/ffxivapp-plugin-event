@@ -13,6 +13,7 @@
              mc:Ignorable="d">
 
     <UserControl.Resources>
+
         <x:Static x:Key="MainViewModel"
                   Member="ViewModels:MainViewModel.Instance" />
         <x:Static x:Key="PluginViewModel"
@@ -32,6 +33,13 @@
         <DockPanel Grid.Row="0"
                    Margin="3"
                    LastChildFill="True">
+            <Label VerticalContentAlignment="Center"
+                   Content="{Binding Locale[event_CategoryLabel],
+                                     Source={StaticResource PluginViewModel}}" />
+            <TextBox x:Name="TCategory"
+                     VerticalContentAlignment="Center"
+                     Text="{Binding Locale[event_SampleCategory],
+                                    Source={StaticResource PluginViewModel}}" Width="100" />
             <Label VerticalContentAlignment="Center"
                    Content="{Binding Locale[event_SoundLabel],
                                      Source={StaticResource PluginViewModel}}" />
@@ -67,7 +75,49 @@
                                             Source={StaticResource PluginViewModel}}"
                       SelectionMode="Single"
                       Utilities:SelectionBehavior.SelectionChanged="{Binding EventSelectionCommand}">
+                <DataGrid.GroupStyle>
+                    <!-- Style for groups at top level. -->
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                            <Expander Background="{DynamicResource HighlightBrush}" 
+                                                      BorderBrush="{DynamicResource AccentColorBrush}"
+                                                      BorderThickness="1"
+                                                      Foreground="{DynamicResource WhiteColorBrush}"
+                                                      IsExpanded="True"
+                                                      Margin="3" 
+                                                      Padding="3">
+                                                <Expander.Header>
+                                                    <DockPanel>
+                                                        <TextBlock FontWeight="Bold" 
+                                                                   Margin="5,0,0,0"
+                                                                   MinWidth="100"
+                                                                   Text="{Binding Path=Name,
+                                                                                  StringFormat=Group: \{0\}}"/>
+                                                        <TextBlock FontWeight="Bold" 
+                                                                   Text="{Binding Path=ItemCount,
+                                                                                  StringFormat=Total: \{0\}}"/>
+                                                    </DockPanel>
+                                                </Expander.Header>
+                                                <Expander.Content>
+                                                    <ItemsPresenter />
+                                                </Expander.Content>
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </DataGrid.GroupStyle>
                 <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Category}"
+                                        Header="{Binding Locale[event_CategoryHeader],
+                                                         Source={StaticResource PluginViewModel}}"
+                                        Utilities:GridViewSort.PropertyName="Category" />
                     <DataGridTextColumn Binding="{Binding Sound}"
                                         Header="{Binding Locale[event_SoundHeader],
                                                          Source={StaticResource PluginViewModel}}"

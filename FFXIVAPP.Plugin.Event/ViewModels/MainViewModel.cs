@@ -18,6 +18,7 @@ using FFXIVAPP.Common.ViewModelBase;
 using FFXIVAPP.Plugin.Event.Models;
 using FFXIVAPP.Plugin.Event.Views;
 using NLog;
+using System.Windows.Data;
 
 #endregion
 
@@ -51,6 +52,19 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             AddEventCommand = new DelegateCommand(AddEvent);
             DeleteEventCommand = new DelegateCommand(DeleteEvent);
             EventSelectionCommand = new DelegateCommand(EventSelection);
+
+
+            
+        }
+
+        public static void setupGrouping()
+        {
+            ICollectionView cvEvents = CollectionViewSource.GetDefaultView(MainView.View.Events.ItemsSource);
+            if (cvEvents != null && cvEvents.CanGroup == true)
+            {
+                cvEvents.GroupDescriptions.Clear();
+                cvEvents.GroupDescriptions.Add(new PropertyGroupDescription("Category"));
+            }
         }
 
         #region Loading Functions
@@ -80,6 +94,8 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         private static void RefreshSoundList()
         {
             Initializer.LoadSounds();
+
+            setupGrouping();
         }
 
         /// <summary>
@@ -102,6 +118,10 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             {
                 return;
             }
+            if (MainView.View.TCategory.Text.Trim() == "")
+            {
+                MainView.View.TCategory.Text = "Miscellaneous";
+            }
             if (Regex.IsMatch(MainView.View.TDelay.Text, @"[^0-9]+"))
             {
                 var popupContent = new PopupContent();
@@ -116,7 +136,8 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             {
                 Sound = MainView.View.TSound.Text,
                 Delay = 0,
-                RegEx = MainView.View.TRegEx.Text
+                RegEx = MainView.View.TRegEx.Text,
+                Category = MainView.View.TCategory.Text
             };
             int result;
             if (Int32.TryParse(MainView.View.TDelay.Text, out result))
@@ -175,6 +196,9 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             MainView.View.TSound.Text = GetValueBySelectedItem(MainView.View.Events, "Sound");
             MainView.View.TDelay.Text = GetValueBySelectedItem(MainView.View.Events, "Delay");
             MainView.View.TRegEx.Text = GetValueBySelectedItem(MainView.View.Events, "RegEx");
+            MainView.View.TCategory.Text = GetValueBySelectedItem(MainView.View.Events, "Category");
+
+
         }
 
         #endregion
