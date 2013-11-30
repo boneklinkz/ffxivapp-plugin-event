@@ -6,6 +6,7 @@
              xmlns:Properties="clr-namespace:FFXIVAPP.Plugin.Event.Properties"
              xmlns:Utilities="clr-namespace:FFXIVAPP.Common.Utilities;assembly=FFXIVAPP.Common"
              xmlns:ViewModels="clr-namespace:FFXIVAPP.Plugin.Event.ViewModels"
+             xmlns:converters="clr-namespace:FFXIVAPP.Plugin.Event.Converters"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              d:DesignHeight="300"
@@ -21,6 +22,7 @@
         <x:Static x:Key="Settings"
                   Member="Properties:Settings.Default" />
         <Converters:VisibilityConverter x:Key="VisibilityConverter" />
+        <converters:NameMultiValueConverter x:Key="NameMultiValueConverter" />
     </UserControl.Resources>
 
     <Grid x:Name="LayoutRoot"
@@ -37,9 +39,10 @@
                    Content="{Binding Locale[event_CategoryLabel],
                                      Source={StaticResource PluginViewModel}}" />
             <TextBox x:Name="TCategory"
+                     Width="100"
                      VerticalContentAlignment="Center"
                      Text="{Binding Locale[event_SampleCategory],
-                                    Source={StaticResource PluginViewModel}}" Width="100" />
+                                    Source={StaticResource PluginViewModel}}" />
             <Label VerticalContentAlignment="Center"
                    Content="{Binding Locale[event_SoundLabel],
                                      Source={StaticResource PluginViewModel}}" />
@@ -76,34 +79,29 @@
                       SelectionMode="Single"
                       Utilities:SelectionBehavior.SelectionChanged="{Binding EventSelectionCommand}">
                 <DataGrid.GroupStyle>
-                    <!-- Style for groups at top level. -->
+                    <!--  Style for groups at top level.  -->
                     <GroupStyle>
                         <GroupStyle.ContainerStyle>
                             <Style TargetType="{x:Type GroupItem}">
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type GroupItem}">
-                                            <Expander Background="{DynamicResource HighlightBrush}" 
-                                                      BorderBrush="{DynamicResource AccentColorBrush}"
-                                                      BorderThickness="1"
-                                                      Foreground="{DynamicResource WhiteColorBrush}"
-                                                      IsExpanded="True"
-                                                      Margin="3" 
-                                                      Padding="3">
-                                                <Expander.Header>
-                                                    <DockPanel>
-                                                        <TextBlock FontWeight="Bold" 
-                                                                   Margin="5,0,0,0"
-                                                                   MinWidth="100"
-                                                                   Text="{Binding Path=Name,
-                                                                                  StringFormat=Group: \{0\}}"/>
-                                                        <TextBlock FontWeight="Bold" 
-                                                                   Text="{Binding Path=ItemCount,
-                                                                                  StringFormat=Total: \{0\}}"/>
-                                                    </DockPanel>
-                                                </Expander.Header>
+                                            <Expander Header="{Binding ElementName=CategoryInfo,
+                                                                       Path=Text}"
+                                                      IsExpanded="True">
                                                 <Expander.Content>
-                                                    <ItemsPresenter />
+                                                    <StackPanel>
+                                                        <TextBlock x:Name="CategoryInfo"
+                                                                   Visibility="Collapsed">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding Converter="{StaticResource NameMultiValueConverter}">
+                                                                    <Binding Path="Name" />
+                                                                    <Binding Path="ItemCount" />
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                        <ItemsPresenter />
+                                                    </StackPanel>
                                                 </Expander.Content>
                                             </Expander>
                                         </ControlTemplate>
