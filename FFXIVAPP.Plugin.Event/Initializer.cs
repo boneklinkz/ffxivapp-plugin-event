@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using FFXIVAPP.Plugin.Event.Models;
+using FFXIVAPP.Plugin.Event.ViewModels;
 
 #endregion
 
@@ -100,7 +101,7 @@ namespace FFXIVAPP.Plugin.Event
         /// </summary>
         public static void ApplyTheming()
         {
-            ViewModels.MainViewModel.setupGrouping();
+            MainViewModel.SetupGrouping();
         }
     }
 }

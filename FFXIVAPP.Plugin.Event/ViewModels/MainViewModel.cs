@@ -52,12 +52,9 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             AddEventCommand = new DelegateCommand(AddEvent);
             DeleteEventCommand = new DelegateCommand(DeleteEvent);
             EventSelectionCommand = new DelegateCommand(EventSelection);
-
-
-            
         }
 
-        public static void setupGrouping()
+        public static void SetupGrouping()
         {
             ICollectionView cvEvents = CollectionViewSource.GetDefaultView(MainView.View.Events.ItemsSource);
             if (cvEvents != null && cvEvents.CanGroup == true)
@@ -94,8 +91,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         private static void RefreshSoundList()
         {
             Initializer.LoadSounds();
-
-            setupGrouping();
+            SetupGrouping();
         }
 
         /// <summary>
