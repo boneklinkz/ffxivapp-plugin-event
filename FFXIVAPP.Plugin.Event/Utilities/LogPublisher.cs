@@ -27,6 +27,10 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                 var line = chatLogEntry.Line.Replace("  ", " ");
                 foreach (var item in PluginViewModel.Instance.Events)
                 {
+                    if (!item.Enabled)
+                    {
+                        continue;
+                    }
                     var resuccess = false;
                     var check = new Regex(item.RegEx);
                     if (SharedRegEx.IsValidRegex(item.RegEx))

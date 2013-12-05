@@ -74,6 +74,7 @@
                       AutoGenerateColumns="False"
                       BorderBrush="{DynamicResource AccentColorBrush}"
                       BorderThickness="1"
+                      CanUserAddRows="False"
                       ItemsSource="{Binding Events,
                                             Source={StaticResource PluginViewModel}}"
                       SelectionMode="Single"
@@ -88,7 +89,7 @@
                                         <ControlTemplate TargetType="{x:Type GroupItem}">
                                             <Expander Header="{Binding ElementName=CategoryInfo,
                                                                        Path=Text}"
-                                                      IsExpanded="True">
+                                                      IsExpanded="False">
                                                 <Expander.Content>
                                                     <StackPanel>
                                                         <TextBlock x:Name="CategoryInfo"
@@ -115,18 +116,26 @@
                     <DataGridTextColumn Binding="{Binding Category}"
                                         Header="{Binding Locale[event_CategoryHeader],
                                                          Source={StaticResource PluginViewModel}}"
+                                        IsReadOnly="True"
                                         Utilities:GridViewSort.PropertyName="Category" />
+                    <DataGridCheckBoxColumn Binding="{Binding Enabled}"
+                                            Header="{Binding Locale[event_EnabledHeader],
+                                                             Source={StaticResource PluginViewModel}}"
+                                            Utilities:GridViewSort.PropertyName="Enabled" />
                     <DataGridTextColumn Binding="{Binding Sound}"
                                         Header="{Binding Locale[event_SoundHeader],
                                                          Source={StaticResource PluginViewModel}}"
+                                        IsReadOnly="True"
                                         Utilities:GridViewSort.PropertyName="Sound" />
                     <DataGridTextColumn Binding="{Binding Delay}"
                                         Header="{Binding Locale[event_DelayHeader],
                                                          Source={StaticResource PluginViewModel}}"
+                                        IsReadOnly="True"
                                         Utilities:GridViewSort.PropertyName="Delay" />
                     <DataGridTextColumn Binding="{Binding RegEx}"
                                         Header="{Binding Locale[event_RegExHeader],
                                                          Source={StaticResource PluginViewModel}}"
+                                        IsReadOnly="True"
                                         Utilities:GridViewSort.PropertyName="RegEx" />
                 </DataGrid.Columns>
             </DataGrid>

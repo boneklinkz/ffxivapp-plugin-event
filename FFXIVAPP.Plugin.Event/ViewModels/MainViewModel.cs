@@ -133,7 +133,8 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 Sound = MainView.View.TSound.Text,
                 Delay = 0,
                 RegEx = MainView.View.TRegEx.Text,
-                Category = MainView.View.TCategory.Text
+                Category = MainView.View.TCategory.Text,
+                Enabled = true
             };
             int result;
             if (Int32.TryParse(MainView.View.TDelay.Text, out result))

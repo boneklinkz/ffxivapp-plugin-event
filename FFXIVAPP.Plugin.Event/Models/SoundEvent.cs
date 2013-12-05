@@ -15,5 +15,6 @@ namespace FFXIVAPP.Plugin.Event.Models
         public int Delay { get; set; }
         public string RegEx { get; set; }
         public string Category { get; set; }
+        public bool Enabled { get; set; }
     }
 }

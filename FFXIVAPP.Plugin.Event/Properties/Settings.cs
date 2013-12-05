@@ -70,6 +70,7 @@ namespace FFXIVAPP.Plugin.Event.Properties
                 var xSound = item.Sound;
                 var xDelay = item.Delay;
                 var xCategory = item.Category;
+                var xEnabled = item.Enabled;
                 var keyPairList = new List<XValuePair>
                 {
                     new XValuePair
@@ -86,6 +87,11 @@ namespace FFXIVAPP.Plugin.Event.Properties
                     {
                         Key = "Category",
                         Value = xCategory
+                    },
+                    new XValuePair
+                    {
+                        Key = "Enabled",
+                        Value = xEnabled.ToString()
                     }
                 };
                 XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Event", xRegEx, keyPairList);

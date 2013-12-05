@@ -27,6 +27,7 @@ namespace FFXIVAPP.Plugin.Event.Localization
             Dictionary.Add("event_RegExLabel", "正規表現:");
             Dictionary.Add("event_CategoryHeader", "Category");
             Dictionary.Add("event_CategoryLabel", "Category:");
+            Dictionary.Add("event_EnabledHeader", "Enabled");
             Dictionary.Add("event_SampleText", "スカウトヴァルチャーは「ウィングカッター」の構え。");
             Dictionary.Add("event_SoundHeader", "サウンド");
             Dictionary.Add("event_SoundLabel", "サウンド:");

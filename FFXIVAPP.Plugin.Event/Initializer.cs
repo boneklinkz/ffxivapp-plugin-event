@@ -60,6 +60,7 @@ namespace FFXIVAPP.Plugin.Event
 
         public static void LoadSoundEvents()
         {
+            PluginViewModel.Instance.Events.Clear();
             if (Constants.XSettings != null)
             {
                 foreach (var xElement in Constants.XSettings.Descendants()
@@ -70,6 +71,14 @@ namespace FFXIVAPP.Plugin.Event
                     var xSound = (string) xElement.Element("Sound");
                     var xDelay = (string) xElement.Element("Delay");
                     var xCategory = (string)xElement.Element("Category");
+                    var xEnabled = true;
+                    try
+                    {
+                        xEnabled = (bool) xElement.Element("Enabled");
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                     if (String.IsNullOrWhiteSpace(xRegEx))
                     {
                         continue;
@@ -81,7 +90,8 @@ namespace FFXIVAPP.Plugin.Event
                         Sound = xSound,
                         Delay = 0,
                         RegEx = xRegEx,
-                        Category = xCategory
+                        Category = xCategory,
+                        Enabled = xEnabled
                     };
                     int result;
                     if (Int32.TryParse(xDelay, out result))
