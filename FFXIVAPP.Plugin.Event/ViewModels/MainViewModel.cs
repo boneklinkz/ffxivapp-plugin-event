@@ -124,8 +124,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 popupContent.PluginName = Plugin.PName;
                 popupContent.Title = PluginViewModel.Instance.Locale["app_WarningMessage"];
                 popupContent.Message = "Delay can only be numeric.";
-                bool popupDisplayed;
-                Plugin.PHost.PopupMessage(Plugin.PName, out popupDisplayed, popupContent);
+                Plugin.PHost.PopupMessage(Plugin.PName, popupContent);
                 return;
             }
             var soundEvent = new SoundEvent
