@@ -1,9 +1,7 @@
 ﻿// FFXIVAPP.Plugin.Event
 // Settings.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System;
 using System.Collections.Generic;
@@ -21,8 +19,6 @@ using NLog;
 using Color = System.Windows.Media.Color;
 using ColorConverter = System.Windows.Media.ColorConverter;
 using FontFamily = System.Drawing.FontFamily;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event.Properties
 {

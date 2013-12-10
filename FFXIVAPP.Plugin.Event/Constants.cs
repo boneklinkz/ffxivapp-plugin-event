@@ -1,9 +1,7 @@
 ﻿// FFXIVAPP.Plugin.Event
 // Constants.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System;
 using System.Collections.Generic;
@@ -11,8 +9,6 @@ using System.Globalization;
 using System.IO;
 using System.Xml.Linq;
 using FFXIVAPP.Common.Helpers;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event
 {

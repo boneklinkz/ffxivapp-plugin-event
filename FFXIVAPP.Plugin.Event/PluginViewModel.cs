@@ -1,9 +1,7 @@
 ﻿// FFXIVAPP.Plugin.Event
 // PluginViewModel.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System;
 using System.Collections.Generic;
@@ -13,8 +11,6 @@ using System.Runtime.CompilerServices;
 using FFXIVAPP.Common.Events;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Plugin.Event.Models;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event
 {

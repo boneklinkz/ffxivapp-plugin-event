@@ -1,9 +1,7 @@
 ﻿// FFXIVAPP.Plugin.Event
 // LogPublisher.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System;
 using System.Text.RegularExpressions;
@@ -13,8 +11,6 @@ using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.RegularExpressions;
 using FFXIVAPP.Common.Utilities;
 using NLog;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event.Utilities
 {

@@ -1,11 +1,7 @@
 ﻿// FFXIVAPP.Plugin.Event
 // SoundEvent.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
-
-#endregion
+// Copyright © 2013 ZAM Network LLC
 
 namespace FFXIVAPP.Plugin.Event.Models
 {

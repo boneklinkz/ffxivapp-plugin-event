@@ -1,13 +1,9 @@
 ﻿// FFXIVAPP.Plugin.Event
 // ShellView.xaml.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System.Windows;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event
 {

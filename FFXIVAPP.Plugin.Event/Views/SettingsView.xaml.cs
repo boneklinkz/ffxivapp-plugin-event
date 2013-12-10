@@ -1,7 +1,7 @@
 ﻿// FFXIVAPP.Plugin.Event
 // SettingsView.xaml.cs
 // 
-// © 2013 ZAM Network LLC
+// Copyright © 2013 ZAM Network LLC
 
 namespace FFXIVAPP.Plugin.Event.Views
 {

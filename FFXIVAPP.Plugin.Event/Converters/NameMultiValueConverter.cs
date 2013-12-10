@@ -1,5 +1,5 @@
 ﻿// FFXIVAPP.Plugin.Event
-// MultiValueConverter.cs
+// NameMultiValueConverter.cs
 // 
 // Copyright © 2013 ZAM Network LLC
 

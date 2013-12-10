@@ -1,13 +1,9 @@
 ﻿// FFXIVAPP.Plugin.Event
 // French.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System.Windows;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event.Localization
 {

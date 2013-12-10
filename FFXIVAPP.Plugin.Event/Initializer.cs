@@ -1,9 +1,7 @@
 ﻿// FFXIVAPP.Plugin.Event
 // Initializer.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System;
 using System.IO;
@@ -12,8 +10,6 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using FFXIVAPP.Plugin.Event.Models;
 using FFXIVAPP.Plugin.Event.ViewModels;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event
 {
@@ -70,7 +66,7 @@ namespace FFXIVAPP.Plugin.Event
                     var xValue = (string) xElement.Element("Value");
                     var xSound = (string) xElement.Element("Sound");
                     var xDelay = (string) xElement.Element("Delay");
-                    var xCategory = (string)xElement.Element("Category");
+                    var xCategory = (string) xElement.Element("Category");
                     var xEnabled = true;
                     try
                     {

@@ -1,14 +1,10 @@
 ﻿// FFXIVAPP.Plugin.Event
 // SettingsViewModel.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event.ViewModels
 {

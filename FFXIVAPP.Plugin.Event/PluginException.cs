@@ -1,14 +1,10 @@
 ﻿// FFXIVAPP.Plugin.Event
 // PluginException.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event
 {

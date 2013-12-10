@@ -1,9 +1,7 @@
 ﻿// FFXIVAPP.Plugin.Event
 // AboutViewModel.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System;
 using System.ComponentModel;
@@ -11,8 +9,6 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using FFXIVAPP.Common.Models;
 using FFXIVAPP.Common.ViewModelBase;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event.ViewModels
 {

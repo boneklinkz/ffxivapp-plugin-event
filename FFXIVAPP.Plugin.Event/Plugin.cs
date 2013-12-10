@@ -1,9 +1,7 @@
 ﻿// FFXIVAPP.Plugin.Event
 // Plugin.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System;
 using System.Collections.Generic;
@@ -12,7 +10,6 @@ using System.ComponentModel.Composition;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using FFXIVAPP.Common.Core.Memory;
 using FFXIVAPP.Common.Events;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.Utilities;
@@ -22,8 +19,6 @@ using FFXIVAPP.Plugin.Event.Helpers;
 using FFXIVAPP.Plugin.Event.Properties;
 using FFXIVAPP.Plugin.Event.Utilities;
 using NLog;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event
 {
@@ -46,6 +41,12 @@ namespace FFXIVAPP.Plugin.Event
         private string _name;
         private MessageBoxResult _popupResult;
 
+        public IPluginHost Host
+        {
+            get { return _host; }
+            set { PHost = _host = value; }
+        }
+
         public MessageBoxResult PopupResult
         {
             get { return _popupResult; }
@@ -54,12 +55,6 @@ namespace FFXIVAPP.Plugin.Event
                 _popupResult = value;
                 PluginViewModel.Instance.OnPopupResultChanged(new PopupResultEvent(value));
             }
-        }
-
-        public IPluginHost Host
-        {
-            get { return _host; }
-            set { PHost = _host = value; }
         }
 
         public Dictionary<string, string> Locale

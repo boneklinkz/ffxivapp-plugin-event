@@ -1,9 +1,7 @@
 ﻿// FFXIVAPP.Plugin.Event
 // LocaleHelper.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System.Collections;
 using System.Collections.Generic;
@@ -11,8 +9,6 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using FFXIVAPP.Plugin.Event.Localization;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event.Helpers
 {

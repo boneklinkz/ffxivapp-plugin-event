@@ -1,9 +1,7 @@
 ﻿// FFXIVAPP.Plugin.Event
 // MainViewModel.cs
 // 
-// © 2013 ZAM Network LLC
-
-#region Usings
+// Copyright © 2013 ZAM Network LLC
 
 using System;
 using System.ComponentModel;
@@ -11,6 +9,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Windows.Controls.Primitives;
+using System.Windows.Data;
 using System.Windows.Input;
 using FFXIVAPP.Common.Models;
 using FFXIVAPP.Common.Utilities;
@@ -18,9 +17,6 @@ using FFXIVAPP.Common.ViewModelBase;
 using FFXIVAPP.Plugin.Event.Models;
 using FFXIVAPP.Plugin.Event.Views;
 using NLog;
-using System.Windows.Data;
-
-#endregion
 
 namespace FFXIVAPP.Plugin.Event.ViewModels
 {
@@ -56,7 +52,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
         public static void SetupGrouping()
         {
-            ICollectionView cvEvents = CollectionViewSource.GetDefaultView(MainView.View.Events.ItemsSource);
+            var cvEvents = CollectionViewSource.GetDefaultView(MainView.View.Events.ItemsSource);
             if (cvEvents != null && cvEvents.CanGroup == true)
             {
                 cvEvents.GroupDescriptions.Clear();
@@ -193,8 +189,6 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             MainView.View.TDelay.Text = GetValueBySelectedItem(MainView.View.Events, "Delay");
             MainView.View.TRegEx.Text = GetValueBySelectedItem(MainView.View.Events, "RegEx");
             MainView.View.TCategory.Text = GetValueBySelectedItem(MainView.View.Events, "Category");
-
-
         }
 
         #endregion
