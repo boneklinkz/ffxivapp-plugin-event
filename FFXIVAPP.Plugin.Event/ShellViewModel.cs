@@ -3,9 +3,11 @@
 // 
 // Copyright © 2013 ZAM Network LLC
 
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using FFXIVAPP.Plugin.Event.Properties;
 
 namespace FFXIVAPP.Plugin.Event
 {
@@ -31,11 +33,18 @@ namespace FFXIVAPP.Plugin.Event
             Initializer.LoadSettings();
             Initializer.LoadSounds();
             Initializer.LoadSoundEvents();
+            Settings.Default.PropertyChanged += DefaultOnPropertyChanged;
         }
 
         internal static void Loaded(object sender, RoutedEventArgs e)
         {
+            ShellView.View.Loaded -= Loaded;
             Initializer.ApplyTheming();
+        }
+
+        private static void DefaultOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            
         }
 
         #region Loading Functions
