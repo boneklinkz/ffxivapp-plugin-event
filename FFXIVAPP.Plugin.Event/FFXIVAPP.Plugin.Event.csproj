@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Converters\NameMultiValueConverter.cs" />
+    <Compile Include="EventSubscriber.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Helpers\LocaleHelper.cs" />
     <Compile Include="Localization\English.cs" />

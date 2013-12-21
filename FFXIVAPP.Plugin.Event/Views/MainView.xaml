@@ -145,13 +145,15 @@
                    LastChildFill="True">
             <Button MinWidth="28"
                     Command="{Binding RefreshSoundListCommand}"
-                    ToolTip="Refresh Sound List">
+                    ToolTip="{Binding Locale[event_RefreshSoundListButtonText],
+                                      Source={StaticResource PluginViewModel}}">
                 <StackPanel Orientation="Horizontal">
                     <Image Width="16"
                            Height="16"
                            RenderOptions.BitmapScalingMode="HighQuality"
                            Source="/FFXIVAPP.Plugin.Event;component/Media/Images/Refresh.png" />
-                    <Label Content="Refresh Sound List"
+                    <Label Content="{Binding Locale[event_RefreshSoundListButtonText],
+                                             Source={StaticResource PluginViewModel}}"
                            Padding="3,0,3,0"
                            Visibility="{Binding EnableHelpLabels,
                                                 Converter={StaticResource VisibilityConverter},

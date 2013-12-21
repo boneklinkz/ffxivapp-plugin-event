@@ -21,14 +21,16 @@ namespace FFXIVAPP.Plugin.Event.Localization
             Dictionary.Add("event_AddUpdateEventButtonText", "イベントの追加/保存");
             Dictionary.Add("event_RegExHeader", "正規表現");
             Dictionary.Add("event_RegExLabel", "正規表現:");
-            Dictionary.Add("event_CategoryHeader", "Category");
-            Dictionary.Add("event_CategoryLabel", "Category:");
-            Dictionary.Add("event_EnabledHeader", "Enabled");
             Dictionary.Add("event_SampleText", "スカウトヴァルチャーは「ウィングカッター」の構え。");
             Dictionary.Add("event_SoundHeader", "サウンド");
             Dictionary.Add("event_SoundLabel", "サウンド:");
             Dictionary.Add("event_DelayHeader", "遅延(秒)");
             Dictionary.Add("event_DelayLabel", "遅延(秒):");
+            Dictionary.Add("event_EnabledHeader", "有効");
+            Dictionary.Add("event_CategoryLabel", "カテゴリ:");
+            Dictionary.Add("event_CategoryHeader", "カテゴリ");
+            Dictionary.Add("event_MiscellaneousLabel", "一般");
+            Dictionary.Add("event_RefreshSoundListButtonText", "サウンドリストを更新");
             return Dictionary;
         }
     }

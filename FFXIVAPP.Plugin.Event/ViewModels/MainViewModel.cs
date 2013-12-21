@@ -112,7 +112,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             }
             if (MainView.View.TCategory.Text.Trim() == "")
             {
-                MainView.View.TCategory.Text = "Miscellaneous";
+                MainView.View.TCategory.Text = PluginViewModel.Instance.Locale["event_MiscellaneousLabel"];
             }
             if (Regex.IsMatch(MainView.View.TDelay.Text, @"[^0-9]+"))
             {
