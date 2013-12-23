@@ -4,6 +4,7 @@
 // Copyright © 2013 ZAM Network LLC
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -12,6 +13,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using FFXIVAPP.Common.Models;
+using FFXIVAPP.Common.RegularExpressions;
 using FFXIVAPP.Common.Utilities;
 using FFXIVAPP.Common.ViewModelBase;
 using FFXIVAPP.Plugin.Event.Models;
@@ -39,6 +41,8 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         public ICommand AddEventCommand { get; private set; }
         public ICommand DeleteEventCommand { get; private set; }
         public ICommand EventSelectionCommand { get; private set; }
+        public ICommand DeleteCategoryCommand { get; private set; }
+        public ICommand ToggleCategoryCommand { get; private set; }
 
         #endregion
 
@@ -48,6 +52,8 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             AddEventCommand = new DelegateCommand(AddEvent);
             DeleteEventCommand = new DelegateCommand(DeleteEvent);
             EventSelectionCommand = new DelegateCommand(EventSelection);
+            DeleteCategoryCommand = new DelegateCommand<string>(DeleteCategory);
+            ToggleCategoryCommand = new DelegateCommand<string>(ToggleCategory);
         }
 
         public static void SetupGrouping()
@@ -189,6 +195,57 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             MainView.View.TDelay.Text = GetValueBySelectedItem(MainView.View.Events, "Delay");
             MainView.View.TRegEx.Text = GetValueBySelectedItem(MainView.View.Events, "RegEx");
             MainView.View.TCategory.Text = GetValueBySelectedItem(MainView.View.Events, "Category");
+        }
+
+        private static void DeleteCategory(string categoryName)
+        {
+            var categoryRegEx = new Regex(@"(?<category>.+) \(\d+\)", SharedRegEx.DefaultOptions);
+            var matches = categoryRegEx.Match(categoryName);
+            if (!matches.Success)
+            {
+                return;
+            }
+            var name = matches.Groups["category"].Value;
+            var events = new List<SoundEvent>(PluginViewModel.Instance.Events.ToList());
+            foreach (var @event in events.Where(@event => @event.Category == name))
+            {
+                PluginViewModel.Instance.Events.Remove(@event);
+            }
+        }
+
+        private static void ToggleCategory(string categoryName)
+        {
+            var categoryRegEx = new Regex(@"(?<category>.+) \(\d+\)", SharedRegEx.DefaultOptions);
+            var matches = categoryRegEx.Match(categoryName);
+            if (!matches.Success)
+            {
+                return;
+            }
+            MainView.View.Events.SelectedItem = null;
+            var name = matches.Groups["category"].Value;
+            var events = new List<SoundEvent>(PluginViewModel.Instance.Events.ToList());
+            var enabledCount = PluginViewModel.Instance.Events.Count(@event => @event.Enabled);
+            var enable = enabledCount == 0 || (enabledCount < PluginViewModel.Instance.Events.Count);
+            if (enable)
+            {
+                for (var i = 0; i < @events.Count; i++)
+                {
+                    if (@events[i].Category == name)
+                    {
+                        PluginViewModel.Instance.Events[i].Enabled = true;
+                    }
+                }
+            }
+            else
+            {
+                for (var i = 0; i < @events.Count; i++)
+                {
+                    if (@events[i].Category == name)
+                    {
+                        PluginViewModel.Instance.Events[i].Enabled = false;
+                    }
+                }
+            }
         }
 
         #endregion
