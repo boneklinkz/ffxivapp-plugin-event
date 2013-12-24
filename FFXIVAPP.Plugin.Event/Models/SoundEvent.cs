@@ -10,11 +10,11 @@ namespace FFXIVAPP.Plugin.Event.Models
 {
     public class SoundEvent : INotifyPropertyChanged
     {
-        private string _sound;
-        private int _delay;
-        private string _regEx;
         private string _category;
+        private int _delay;
         private bool _enabled;
+        private string _regEx;
+        private string _sound;
 
         public string Sound
         {

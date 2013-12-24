@@ -3,7 +3,6 @@
 // 
 // Copyright © 2013 ZAM Network LLC
 
-using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -44,7 +43,6 @@ namespace FFXIVAPP.Plugin.Event
 
         private static void DefaultOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
         {
-            
         }
 
         #region Loading Functions
