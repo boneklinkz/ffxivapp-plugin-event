@@ -10,8 +10,10 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
+using System.Xml.Linq;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.Models;
 using FFXIVAPP.Common.Utilities;
@@ -33,65 +35,10 @@ namespace FFXIVAPP.Plugin.Event.Properties
 
         public override void Save()
         {
-            XmlHelper.DeleteXmlNode(Constants.XSettings, "Setting");
-            if (Constants.Settings.Count == 0)
-            {
-            }
+            // this call to default settings only ensures we keep the settings we want and delete the ones we don't (old)
             DefaultSettings();
-            foreach (var item in Constants.Settings)
-            {
-                try
-                {
-                    var xKey = item;
-                    var xValue = Default[xKey].ToString();
-                    var keyPairList = new List<XValuePair>
-                    {
-                        new XValuePair
-                        {
-                            Key = "Value",
-                            Value = xValue
-                        }
-                    };
-                    XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Setting", xKey, keyPairList);
-                }
-                catch (Exception ex)
-                {
-                    Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
-                }
-            }
-            XmlHelper.DeleteXmlNode(Constants.XSettings, "Event");
-            foreach (var item in PluginViewModel.Instance.Events)
-            {
-                var xRegEx = item.RegEx;
-                var xSound = item.Sound;
-                var xDelay = item.Delay;
-                var xCategory = item.Category;
-                var xEnabled = item.Enabled;
-                var keyPairList = new List<XValuePair>
-                {
-                    new XValuePair
-                    {
-                        Key = "Sound",
-                        Value = xSound
-                    },
-                    new XValuePair
-                    {
-                        Key = "Delay",
-                        Value = xDelay.ToString(CultureInfo.InvariantCulture)
-                    },
-                    new XValuePair
-                    {
-                        Key = "Category",
-                        Value = xCategory
-                    },
-                    new XValuePair
-                    {
-                        Key = "Enabled",
-                        Value = xEnabled.ToString()
-                    }
-                };
-                XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Event", xRegEx, keyPairList);
-            }
+            SaveSettingsNode();
+            SaveEventsNode();
             Constants.XSettings.Save(Constants.BaseDirectory + "Settings.xml");
         }
 
@@ -217,6 +164,123 @@ namespace FFXIVAPP.Plugin.Event.Properties
         private void RaisePropertyChanged([CallerMemberName] string caller = "")
         {
             PropertyChanged(this, new PropertyChangedEventArgs(caller));
+        }
+
+        #endregion
+
+        #region Iterative Settings Saving
+
+        private void SaveSettingsNode()
+        {
+            if (Constants.XSettings == null)
+            {
+                return;
+            }
+            var xElements = Constants.XSettings.Descendants()
+                                     .Elements("Setting");
+            var enumerable = xElements as XElement[] ?? xElements.ToArray();
+            foreach (var setting in Constants.Settings)
+            {
+                var element = enumerable.FirstOrDefault(e => e.Attribute("Key")
+                                                              .Value == setting);
+                if (element == null)
+                {
+                    var xKey = setting;
+                    var xValue = Default[xKey].ToString();
+                    var keyPairList = new List<XValuePair>
+                    {
+                        new XValuePair
+                        {
+                            Key = "Value",
+                            Value = xValue
+                        }
+                    };
+                    XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Setting", xKey, keyPairList);
+                }
+                else
+                {
+                    var xElement = element.Element("Value");
+                    if (xElement != null)
+                    {
+                        xElement.Value = Default[setting].ToString();
+                    }
+                }
+            }
+        }
+
+        private void SaveEventsNode()
+        {
+            if (Constants.XSettings == null)
+            {
+                return;
+            }
+            Constants.XSettings.Descendants("Event")
+                     .Where(node => PluginViewModel.Instance.Events.All(e => e.RegEx != node.Attribute("Key")
+                                                                                            .Value))
+                     .Remove();
+            var xElements = Constants.XSettings.Descendants()
+                                     .Elements("Event");
+            var enumerable = xElements as XElement[] ?? xElements.ToArray();
+            foreach (var item in PluginViewModel.Instance.Events)
+            {
+                var xRegEx = item.RegEx;
+                var xSound = item.Sound;
+                var xDelay = item.Delay;
+                var xCategory = item.Category;
+                var xEnabled = item.Enabled;
+                var keyPairList = new List<XValuePair>
+                {
+                    new XValuePair
+                    {
+                        Key = "Sound",
+                        Value = xSound
+                    },
+                    new XValuePair
+                    {
+                        Key = "Delay",
+                        Value = xDelay.ToString(CultureInfo.InvariantCulture)
+                    },
+                    new XValuePair
+                    {
+                        Key = "Category",
+                        Value = xCategory
+                    },
+                    new XValuePair
+                    {
+                        Key = "Enabled",
+                        Value = xEnabled.ToString()
+                    }
+                };
+                var element = enumerable.FirstOrDefault(e => e.Attribute("Key")
+                                                              .Value == xRegEx);
+                if (element == null)
+                {
+                    XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Event", xRegEx, keyPairList);
+                }
+                else
+                {
+                    var xSoundElement = element.Element("Sound");
+                    if (xSoundElement != null)
+                    {
+                        xSoundElement.Value = xSound;
+                    }
+                    var xDelayElement = element.Element("Delay");
+                    if (xDelayElement != null)
+                    {
+                        xDelayElement.Value = xDelay.ToString(CultureInfo.InvariantCulture);
+                    }
+                    var xCategoryElement = element.Element("Category");
+                    if (xCategoryElement != null)
+                    {
+                        xCategoryElement.Value = xCategory;
+                    }
+                    var xEnabledElement = element.Element("Enabled");
+                    if (xEnabledElement != null)
+                    {
+                        xEnabledElement.Value = xEnabled.ToString();
+                    }
+                }
+            }
         }
 
         #endregion
