@@ -39,7 +39,7 @@ namespace FFXIVAPP.Plugin.Event.Properties
             DefaultSettings();
             SaveSettingsNode();
             SaveEventsNode();
-            Constants.XSettings.Save(Constants.BaseDirectory + "Settings.xml");
+            Constants.XSettings.Save(Common.Constants.PluginsSettingsPath + "FFXIVAPP.Plugin.Event.xml");
         }
 
         private void DefaultSettings()
