@@ -39,6 +39,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
         public ICommand RefreshSoundListCommand { get; private set; }
         public ICommand AddEventCommand { get; private set; }
+        public ICommand UpdateEventCommand { get; private set; }
         public ICommand DeleteEventCommand { get; private set; }
         public ICommand EventSelectionCommand { get; private set; }
         public ICommand DeleteCategoryCommand { get; private set; }
@@ -51,6 +52,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         {
             RefreshSoundListCommand = new DelegateCommand(RefreshSoundList);
             AddEventCommand = new DelegateCommand(AddEvent);
+            UpdateEventCommand = new DelegateCommand(UpdateEvent);
             DeleteEventCommand = new DelegateCommand(DeleteEvent);
             EventSelectionCommand = new DelegateCommand(EventSelection);
             DeleteCategoryCommand = new DelegateCommand<string>(DeleteCategory);
@@ -98,26 +100,20 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             SetupGrouping();
         }
 
-        /// <summary>
-        /// </summary>
-        private static void AddEvent()
+        private static void ResetForm()
         {
-            Guid? selectedId = null;
-            try
-            {
-                if (MainView.View.Events.SelectedItems.Count == 1)
-                {
-                    selectedId = new Guid(GetValueBySelectedItem(MainView.View.Events, "Id"));
-                }
-            }
-            catch (Exception ex)
-            {
-                Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
-            }
+            MainView.View.Events.UnselectAll();
+            MainView.View.TRegEx.Text = "";
+            MainView.View.TExecutable.Text = "";
+        }
 
-            if (MainView.View.TDelay.Text.Trim() == "" || MainView.View.TRegEx.Text.Trim() == "")
+
+
+        private static LogEvent GetEvent()
+        {
+            if (MainView.View.TRegEx.Text.Trim() == "")
             {
-                return;
+                return null;
             }
 
             if (MainView.View.TCategory.Text.Trim() == "")
@@ -134,7 +130,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                     Message = "Delay can only be numeric."
                 };
                 Plugin.PHost.PopupMessage(Plugin.PName, popupContent);
-                return;
+                return null;
             }
 
             var logEvent = new LogEvent
@@ -153,20 +149,58 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 logEvent.Delay = result;
             }
 
-            if (selectedId == null || selectedId == Guid.Empty)
+            return logEvent;
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void AddEvent()
+        {
+            var logEvent = GetEvent();
+
+            if (logEvent == null)
             {
-                logEvent.Id = Guid.NewGuid();
-                PluginViewModel.Instance.Events.Add(logEvent);
-            }
-            else
-            {
-                var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Id != selectedId).Count();
-                PluginViewModel.Instance.Events[index] = logEvent;
+                return;
             }
 
-            MainView.View.Events.UnselectAll();
-            MainView.View.TRegEx.Text = "";
-            MainView.View.TExecutable.Text = "";
+            logEvent.Id = Guid.NewGuid();
+
+            PluginViewModel.Instance.Events.Add(logEvent);
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void UpdateEvent()
+        {
+            if (MainView.View.Events.SelectedItems.Count != 1)
+            {
+                return;
+            }
+
+            Guid? selectedId = null;
+            try
+            {
+                selectedId = new Guid(GetValueBySelectedItem(MainView.View.Events, "Id"));
+            }
+            catch (Exception ex)
+            {
+                Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
+            }
+
+            if (selectedId == null || selectedId == Guid.Empty)
+            {
+                return;
+            }
+
+            var logEvent = GetEvent();
+
+            if (logEvent == null)
+            {
+                return;
+            }
+
+            var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Id != selectedId).Count();
+            PluginViewModel.Instance.Events[index] = logEvent;
         }
 
         /// <summary>

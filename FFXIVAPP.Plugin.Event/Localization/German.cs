@@ -18,7 +18,9 @@ namespace FFXIVAPP.Plugin.Event.Localization
         {
             Dictionary.Clear();
             Dictionary.Add("event_PLACEHOLDER", "*PH*");
-            Dictionary.Add("event_AddUpdateEventButtonText", "Ereignis hinzufügen oder updaten");
+            //Dictionary.Add("event_AddUpdateEventButtonText", "Ereignis hinzufügen oder updaten");
+            Dictionary.Add("event_UpdateEventButtonText", "Ereignis updaten");
+            Dictionary.Add("event_AddEventButtonText", "Ereignis hinzufügen");
             Dictionary.Add("event_RegExHeader", "RegEx");
             Dictionary.Add("event_RegExLabel", "RegEx:");
             Dictionary.Add("event_SampleText", "The scout vulture readies Wing Cutter.");

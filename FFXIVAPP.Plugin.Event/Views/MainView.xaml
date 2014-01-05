@@ -164,8 +164,12 @@
                     Command="{Binding DeleteEventCommand}"
                     Content="-" />
             <Button Margin="3 0 0 0"
+                    Command="{Binding UpdateEventCommand}"
+                    Content="{Binding Locale[event_UpdateEventButtonText],
+                                      Source={StaticResource PluginViewModel}}" />
+            <Button Margin="3 0 0 0"
                     Command="{Binding AddEventCommand}"
-                    Content="{Binding Locale[event_AddUpdateEventButtonText],
+                    Content="{Binding Locale[event_AddEventButtonText],
                                       Source={StaticResource PluginViewModel}}" />
         </DockPanel>
         <DockPanel Grid.Row="3"

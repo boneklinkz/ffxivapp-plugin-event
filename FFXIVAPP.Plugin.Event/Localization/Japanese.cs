@@ -19,6 +19,8 @@ namespace FFXIVAPP.Plugin.Event.Localization
             Dictionary.Clear();
             Dictionary.Add("event_PLACEHOLDER", "*PH*");
             Dictionary.Add("event_AddUpdateEventButtonText", "イベントの追加/保存");
+            Dictionary.Add("event_UpdateEventButtonText", "Update event");
+            Dictionary.Add("event_AddEventButtonText", "Add event");
             Dictionary.Add("event_RegExHeader", "正規表現");
             Dictionary.Add("event_RegExLabel", "正規表現:");
             Dictionary.Add("event_SampleText", "スカウトヴァルチャーは「ウィングカッター」の構え。");
