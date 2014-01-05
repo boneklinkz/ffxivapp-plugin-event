@@ -127,16 +127,17 @@
             <Label VerticalContentAlignment="Center"
                    Content="{Binding Locale[event_ExecutableLabel],
                                      Source={StaticResource PluginViewModel}}" />
-            <TextBox x:Name="TExecutable"
-                     Width="200"
-                     VerticalContentAlignment="Center"
-                     Text="{Binding Locale[event_SampleExecutable],
-                                    Source={StaticResource PluginViewModel}}"/>
             <Button Margin="3 0 0 0"
                     VerticalContentAlignment="Center"
+                    DockPanel.Dock="Right"
                     Command="{Binding SelectExecutableCommand}"
                     Content="{Binding Locale[event_SelectExecutableText],
-                                      Source={StaticResource PluginViewModel}}" />
+                                  Source={StaticResource PluginViewModel}}" />
+            <TextBox x:Name="TExecutable"
+                    DockPanel.Dock="Left"
+                    VerticalContentAlignment="Center"
+                    Text="{Binding Locale[event_SampleExecutable],
+                            Source={StaticResource PluginViewModel}}"/>
         </DockPanel>
         <DockPanel Grid.Row="2"
                    Margin="3"
