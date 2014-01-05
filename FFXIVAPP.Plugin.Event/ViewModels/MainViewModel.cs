@@ -88,26 +88,12 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                            .ToString();
         }
 
-        #endregion
-
-        #region Command Bindings
-
-        /// <summary>
-        /// </summary>
-        private static void RefreshSoundList()
-        {
-            Initializer.LoadSounds();
-            SetupGrouping();
-        }
-
         private static void ResetForm()
         {
             MainView.View.Events.UnselectAll();
             MainView.View.TRegEx.Text = "";
             MainView.View.TExecutable.Text = "";
         }
-
-
 
         private static LogEvent GetEvent()
         {
@@ -152,6 +138,18 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             return logEvent;
         }
 
+        #endregion
+
+        #region Command Bindings
+
+        /// <summary>
+        /// </summary>
+        private static void RefreshSoundList()
+        {
+            Initializer.LoadSounds();
+            SetupGrouping();
+        }
+
         /// <summary>
         /// </summary>
         private static void AddEvent()
@@ -164,8 +162,9 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             }
 
             logEvent.Id = Guid.NewGuid();
-
             PluginViewModel.Instance.Events.Add(logEvent);
+
+            ResetForm();
         }
 
         /// <summary>
@@ -201,6 +200,8 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
             var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Id != selectedId).Count();
             PluginViewModel.Instance.Events[index] = logEvent;
+
+            ResetForm();
         }
 
         /// <summary>
