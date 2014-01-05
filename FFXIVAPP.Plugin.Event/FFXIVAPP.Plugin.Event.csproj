@@ -82,6 +82,7 @@
     <Compile Include="Localization\French.cs" />
     <Compile Include="Localization\German.cs" />
     <Compile Include="Localization\Japanese.cs" />
+    <Compile Include="Models\LogEvent.cs" />
     <Compile Include="Models\SoundEvent.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="PluginException.cs" />
@@ -92,6 +93,7 @@
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ShellViewModel.cs" />
+    <Compile Include="Utilities\ExecutableHelper.cs" />
     <Compile Include="Utilities\LogPublisher.cs" />
     <Compile Include="ViewModels\SettingsViewModel.cs">
       <SubType>

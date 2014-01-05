@@ -29,7 +29,7 @@ namespace FFXIVAPP.Plugin.Event
 
         private static PluginViewModel _instance;
         private bool _enableHelpLabels;
-        private ObservableCollection<SoundEvent> _events;
+        private ObservableCollection<LogEvent> _events;
         private Dictionary<string, string> _locale;
         private ObservableCollection<string> _soundFiles;
 
@@ -72,14 +72,14 @@ namespace FFXIVAPP.Plugin.Event
             }
         }
 
-        public ObservableCollection<SoundEvent> Events
+        public ObservableCollection<LogEvent> Events
         {
-            get { return _events ?? (_events = new ObservableCollection<SoundEvent>()); }
+            get { return _events ?? (_events = new ObservableCollection<LogEvent>()); }
             set
             {
                 if (_events == null)
                 {
-                    _events = new ObservableCollection<SoundEvent>();
+                    _events = new ObservableCollection<LogEvent>();
                 }
                 _events = value;
                 RaisePropertyChanged();

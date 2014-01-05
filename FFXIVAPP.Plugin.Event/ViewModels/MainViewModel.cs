@@ -43,6 +43,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         public ICommand EventSelectionCommand { get; private set; }
         public ICommand DeleteCategoryCommand { get; private set; }
         public ICommand ToggleCategoryCommand { get; private set; }
+        public ICommand SelectExecutableCommand { get; private set; }
 
         #endregion
 
@@ -54,6 +55,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             EventSelectionCommand = new DelegateCommand(EventSelection);
             DeleteCategoryCommand = new DelegateCommand<string>(DeleteCategory);
             ToggleCategoryCommand = new DelegateCommand<string>(ToggleCategory);
+            SelectExecutableCommand = new DelegateCommand(SelectExecutable);
         }
 
         public static void SetupGrouping()
@@ -100,64 +102,71 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         /// </summary>
         private static void AddEvent()
         {
-            var selectedKey = "";
+            Guid? selectedId = null;
             try
             {
                 if (MainView.View.Events.SelectedItems.Count == 1)
                 {
-                    selectedKey = GetValueBySelectedItem(MainView.View.Events, "RegEx");
+                    selectedId = new Guid(GetValueBySelectedItem(MainView.View.Events, "Id"));
                 }
             }
             catch (Exception ex)
             {
                 Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
             }
-            if (MainView.View.TSound.Text.Trim() == "" || MainView.View.TDelay.Text.Trim() == "" || MainView.View.TRegEx.Text.Trim() == "")
+
+            if (MainView.View.TDelay.Text.Trim() == "" || MainView.View.TRegEx.Text.Trim() == "")
             {
                 return;
             }
+
             if (MainView.View.TCategory.Text.Trim() == "")
             {
                 MainView.View.TCategory.Text = PluginViewModel.Instance.Locale["event_MiscellaneousLabel"];
             }
+
             if (Regex.IsMatch(MainView.View.TDelay.Text, @"[^0-9]+"))
             {
-                var popupContent = new PopupContent();
-                popupContent.PluginName = Plugin.PName;
-                popupContent.Title = PluginViewModel.Instance.Locale["app_WarningMessage"];
-                popupContent.Message = "Delay can only be numeric.";
+                var popupContent = new PopupContent
+                {
+                    PluginName = Plugin.PName,
+                    Title = PluginViewModel.Instance.Locale["app_WarningMessage"],
+                    Message = "Delay can only be numeric."
+                };
                 Plugin.PHost.PopupMessage(Plugin.PName, popupContent);
                 return;
             }
-            var soundEvent = new SoundEvent
+
+            var logEvent = new LogEvent
             {
                 Sound = MainView.View.TSound.Text,
                 Delay = 0,
                 RegEx = MainView.View.TRegEx.Text,
                 Category = MainView.View.TCategory.Text,
-                Enabled = true
+                Enabled = true,
+                Executable = MainView.View.TExecutable.Text
             };
+
             int result;
             if (Int32.TryParse(MainView.View.TDelay.Text, out result))
             {
-                soundEvent.Delay = result;
+                logEvent.Delay = result;
             }
-            if (String.IsNullOrWhiteSpace(selectedKey))
+
+            if (selectedId == null || selectedId == Guid.Empty)
             {
-                var found = PluginViewModel.Instance.Events.Any(se => se.RegEx == soundEvent.RegEx);
-                if (!found)
-                {
-                    PluginViewModel.Instance.Events.Add(soundEvent);
-                }
+                logEvent.Id = Guid.NewGuid();
+                PluginViewModel.Instance.Events.Add(logEvent);
             }
             else
             {
-                var index = PluginViewModel.Instance.Events.TakeWhile(se => se.RegEx != selectedKey)
-                                           .Count();
-                PluginViewModel.Instance.Events[index] = soundEvent;
+                var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Id != selectedId).Count();
+                PluginViewModel.Instance.Events[index] = logEvent;
             }
+
             MainView.View.Events.UnselectAll();
             MainView.View.TRegEx.Text = "";
+            MainView.View.TExecutable.Text = "";
         }
 
         /// <summary>
@@ -167,16 +176,27 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             string selectedKey;
             try
             {
-                selectedKey = GetValueBySelectedItem(MainView.View.Events, "RegEx");
+                selectedKey = GetValueBySelectedItem(MainView.View.Events, "Id");
             }
             catch (Exception ex)
             {
                 Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
                 return;
             }
-            var index = PluginViewModel.Instance.Events.TakeWhile(se => se.RegEx != selectedKey)
-                                       .Count();
+            var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Id.ToString() != selectedKey).Count();
             PluginViewModel.Instance.Events.RemoveAt(index);
+        }
+
+        /// <summary>
+        /// </summary>
+        private static void SelectExecutable()
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+
+            if (dialog.ShowDialog().GetValueOrDefault())
+            {
+                MainView.View.TExecutable.Text = dialog.FileName;
+            }
         }
 
         /// <summary>
@@ -195,6 +215,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             MainView.View.TDelay.Text = GetValueBySelectedItem(MainView.View.Events, "Delay");
             MainView.View.TRegEx.Text = GetValueBySelectedItem(MainView.View.Events, "RegEx");
             MainView.View.TCategory.Text = GetValueBySelectedItem(MainView.View.Events, "Category");
+            MainView.View.TExecutable.Text = GetValueBySelectedItem(MainView.View.Events, "Executable");
         }
 
         private static void DeleteCategory(string categoryName)
@@ -206,7 +227,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 return;
             }
             var name = matches.Groups["category"].Value;
-            var events = new List<SoundEvent>(PluginViewModel.Instance.Events.ToList());
+            var events = new List<LogEvent>(PluginViewModel.Instance.Events.ToList());
             foreach (var @event in events.Where(@event => @event.Category == name))
             {
                 PluginViewModel.Instance.Events.Remove(@event);
@@ -223,7 +244,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             }
             MainView.View.Events.SelectedItem = null;
             var name = matches.Groups["category"].Value;
-            var events = new List<SoundEvent>(PluginViewModel.Instance.Events.ToList());
+            var events = new List<LogEvent>(PluginViewModel.Instance.Events.ToList());
             var enabledCount = PluginViewModel.Instance.Events.Count(@event => @event.Enabled);
             var enable = enabledCount == 0 || (enabledCount < PluginViewModel.Instance.Events.Count);
             if (enable)

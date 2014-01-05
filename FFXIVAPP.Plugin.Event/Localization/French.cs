@@ -31,6 +31,9 @@ namespace FFXIVAPP.Plugin.Event.Localization
             Dictionary.Add("event_CategoryHeader", "Category");
             Dictionary.Add("event_MiscellaneousLabel", "Miscellaneous");
             Dictionary.Add("event_RefreshSoundListButtonText", "Refresh Sound List");
+            Dictionary.Add("event_ExecutableLabel", "Run:");
+            Dictionary.Add("event_SelectExecutableText", "Select File");
+            Dictionary.Add("event_ExecutableHeader", "Run");
             return Dictionary;
         }
     }
