@@ -83,8 +83,8 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="33" />
             <RowDefinition Height="33" />
-            <RowDefinition Height="33" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="33" />
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0"
                    Margin="3"
@@ -129,50 +129,17 @@
                                      Source={StaticResource PluginViewModel}}" />
             <Button Margin="3 0 0 0"
                     VerticalContentAlignment="Center"
-                    DockPanel.Dock="Right"
                     Command="{Binding SelectExecutableCommand}"
-                    Content="{Binding Locale[event_SelectExecutableText],
-                                  Source={StaticResource PluginViewModel}}" />
+                    Content="{Binding Locale[event_SelectExecutableButtonText],
+                                      Source={StaticResource PluginViewModel}}"
+                    DockPanel.Dock="Right" />
             <TextBox x:Name="TExecutable"
-                    DockPanel.Dock="Left"
-                    VerticalContentAlignment="Center"
-                    Text="{Binding Locale[event_SampleExecutable],
-                            Source={StaticResource PluginViewModel}}"/>
+                     VerticalContentAlignment="Center"
+                     DockPanel.Dock="Left"
+                     Text="{Binding Locale[event_SampleExecutable],
+                                    Source={StaticResource PluginViewModel}}" />
         </DockPanel>
         <DockPanel Grid.Row="2"
-                   Margin="3"
-                   LastChildFill="True">
-            <Button MinWidth="28"
-                    Command="{Binding RefreshSoundListCommand}"
-                    ToolTip="{Binding Locale[event_RefreshSoundListButtonText],
-                                      Source={StaticResource PluginViewModel}}">
-                <StackPanel Orientation="Horizontal">
-                    <Image Width="16"
-                           Height="16"
-                           RenderOptions.BitmapScalingMode="HighQuality"
-                           Source="/FFXIVAPP.Plugin.Event;component/Media/Images/Refresh.png" />
-                    <Label Content="{Binding Locale[event_RefreshSoundListButtonText],
-                                             Source={StaticResource PluginViewModel}}"
-                           Padding="3,0,3,0"
-                           Visibility="{Binding EnableHelpLabels,
-                                                Converter={StaticResource VisibilityConverter},
-                                                Source={StaticResource PluginViewModel}}" />
-                </StackPanel>
-            </Button>
-            <Button Width="27"
-                    Margin="3 0 0 0"
-                    Command="{Binding DeleteEventCommand}"
-                    Content="-" />
-            <Button Margin="3 0 0 0"
-                    Command="{Binding UpdateEventCommand}"
-                    Content="{Binding Locale[event_UpdateEventButtonText],
-                                      Source={StaticResource PluginViewModel}}" />
-            <Button Margin="3 0 0 0"
-                    Command="{Binding AddEventCommand}"
-                    Content="{Binding Locale[event_AddEventButtonText],
-                                      Source={StaticResource PluginViewModel}}" />
-        </DockPanel>
-        <DockPanel Grid.Row="3"
                    Margin="3"
                    LastChildFill="True">
             <DataGrid x:Name="Events"
@@ -219,11 +186,13 @@
                     </GroupStyle>
                 </DataGrid.GroupStyle>
                 <DataGrid.Columns>
-                    <!--<DataGridTextColumn Binding="{Binding Category}"
-                                        Header="{Binding Locale[event_CategoryHeader],
-                                                         Source={StaticResource PluginViewModel}}"
-                                        IsReadOnly="True"
-                                        Utilities:GridViewSort.PropertyName="Category" />-->
+                    <!--
+                        <DataGridTextColumn Binding="{Binding Category}"
+                        Header="{Binding Locale[event_CategoryHeader],
+                        Source={StaticResource PluginViewModel}}"
+                        IsReadOnly="True"
+                        Utilities:GridViewSort.PropertyName="Category" />
+                    -->
                     <DataGridCheckBoxColumn Binding="{Binding Enabled}"
                                             Header="{Binding Locale[event_EnabledHeader],
                                                              Source={StaticResource PluginViewModel}}"
@@ -250,6 +219,35 @@
                                         Utilities:GridViewSort.PropertyName="Delay" />
                 </DataGrid.Columns>
             </DataGrid>
+        </DockPanel>
+        <DockPanel Grid.Row="3"
+                   Margin="3"
+                   LastChildFill="True">
+            <Button MinWidth="28"
+                    Command="{Binding RefreshSoundListCommand}"
+                    ToolTip="{Binding Locale[event_RefreshSoundListButtonText],
+                                      Source={StaticResource PluginViewModel}}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="16"
+                           Height="16"
+                           RenderOptions.BitmapScalingMode="HighQuality"
+                           Source="/FFXIVAPP.Plugin.Event;component/Media/Images/Refresh.png" />
+                    <Label Content="{Binding Locale[event_RefreshSoundListButtonText],
+                                             Source={StaticResource PluginViewModel}}"
+                           Padding="3,0,3,0"
+                           Visibility="{Binding EnableHelpLabels,
+                                                Converter={StaticResource VisibilityConverter},
+                                                Source={StaticResource PluginViewModel}}" />
+                </StackPanel>
+            </Button>
+            <Button Width="27"
+                    Margin="3 0 0 0"
+                    Command="{Binding DeleteEventCommand}"
+                    Content="-" />
+            <Button Margin="3 0 0 0"
+                    Command="{Binding AddOrUpdateEventCommand}"
+                    Content="{Binding Locale[event_AddUpdateEventButtonText],
+                                      Source={StaticResource PluginViewModel}}" />
         </DockPanel>
     </Grid>
 </UserControl>

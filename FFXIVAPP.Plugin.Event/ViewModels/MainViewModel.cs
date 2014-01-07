@@ -2,6 +2,25 @@
 // MainViewModel.cs
 // 
 // Copyright © 2013 ZAM Network LLC
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without modification, are permitted provided that the 
+// following conditions are met: 
+// 
+//  * Redistributions of source code must retain the above copyright notice, this list of conditions and the following 
+//    disclaimer. 
+//  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the 
+//    following disclaimer in the documentation and/or other materials provided with the distribution. 
+//  * Neither the name of ZAM Network LLC nor the names of its contributors may be used to endorse or promote products 
+//    derived from this software without specific prior written permission. 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, 
+// INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, 
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
+// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+// WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE 
+// USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 
 using System;
 using System.Collections.Generic;
@@ -18,6 +37,7 @@ using FFXIVAPP.Common.Utilities;
 using FFXIVAPP.Common.ViewModelBase;
 using FFXIVAPP.Plugin.Event.Models;
 using FFXIVAPP.Plugin.Event.Views;
+using Microsoft.Win32;
 using NLog;
 
 namespace FFXIVAPP.Plugin.Event.ViewModels
@@ -38,8 +58,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         #region Declarations
 
         public ICommand RefreshSoundListCommand { get; private set; }
-        public ICommand AddEventCommand { get; private set; }
-        public ICommand UpdateEventCommand { get; private set; }
+        public ICommand AddOrUpdateEventCommand { get; private set; }
         public ICommand DeleteEventCommand { get; private set; }
         public ICommand EventSelectionCommand { get; private set; }
         public ICommand DeleteCategoryCommand { get; private set; }
@@ -51,8 +70,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         public MainViewModel()
         {
             RefreshSoundListCommand = new DelegateCommand(RefreshSoundList);
-            AddEventCommand = new DelegateCommand(AddEvent);
-            UpdateEventCommand = new DelegateCommand(UpdateEvent);
+            AddOrUpdateEventCommand = new DelegateCommand(AddOrUpdateEvent);
             DeleteEventCommand = new DelegateCommand(DeleteEvent);
             EventSelectionCommand = new DelegateCommand(EventSelection);
             DeleteCategoryCommand = new DelegateCommand<string>(DeleteCategory);
@@ -88,18 +106,38 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                            .ToString();
         }
 
-        private static void ResetForm()
+        #endregion
+
+        #region Command Bindings
+
+        /// <summary>
+        /// </summary>
+        private static void RefreshSoundList()
         {
-            MainView.View.Events.UnselectAll();
-            MainView.View.TRegEx.Text = "";
-            MainView.View.TExecutable.Text = "";
+            Initializer.LoadSounds();
+            SetupGrouping();
         }
 
-        private static LogEvent GetEvent()
+        /// <summary>
+        /// </summary>
+        private static void AddOrUpdateEvent()
         {
-            if (MainView.View.TRegEx.Text.Trim() == "")
+            var selectedId = Guid.Empty;
+            try
             {
-                return null;
+                if (MainView.View.Events.SelectedItems.Count == 1)
+                {
+                    selectedId = new Guid(GetValueBySelectedItem(MainView.View.Events, "Id"));
+                }
+            }
+            catch (Exception ex)
+            {
+                Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
+            }
+
+            if (MainView.View.TDelay.Text.Trim() == "" || MainView.View.TRegEx.Text.Trim() == "")
+            {
+                return;
             }
 
             if (MainView.View.TCategory.Text.Trim() == "")
@@ -116,7 +154,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                     Message = "Delay can only be numeric."
                 };
                 Plugin.PHost.PopupMessage(Plugin.PName, popupContent);
-                return null;
+                return;
             }
 
             var logEvent = new LogEvent
@@ -135,73 +173,22 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 logEvent.Delay = result;
             }
 
-            return logEvent;
-        }
-
-        #endregion
-
-        #region Command Bindings
-
-        /// <summary>
-        /// </summary>
-        private static void RefreshSoundList()
-        {
-            Initializer.LoadSounds();
-            SetupGrouping();
-        }
-
-        /// <summary>
-        /// </summary>
-        private static void AddEvent()
-        {
-            var logEvent = GetEvent();
-
-            if (logEvent == null)
+            if (selectedId == Guid.Empty)
             {
-                return;
+                logEvent.Id = Guid.NewGuid();
+                PluginViewModel.Instance.Events.Add(logEvent);
+            }
+            else
+            {
+                logEvent.Id = selectedId;
+                var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Id != selectedId)
+                                           .Count();
+                PluginViewModel.Instance.Events[index] = logEvent;
             }
 
-            logEvent.Id = Guid.NewGuid();
-            PluginViewModel.Instance.Events.Add(logEvent);
-
-            ResetForm();
-        }
-
-        /// <summary>
-        /// </summary>
-        private static void UpdateEvent()
-        {
-            if (MainView.View.Events.SelectedItems.Count != 1)
-            {
-                return;
-            }
-
-            Guid? selectedId = null;
-            try
-            {
-                selectedId = new Guid(GetValueBySelectedItem(MainView.View.Events, "Id"));
-            }
-            catch (Exception ex)
-            {
-                Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
-            }
-
-            if (selectedId == null || selectedId == Guid.Empty)
-            {
-                return;
-            }
-
-            var logEvent = GetEvent();
-
-            if (logEvent == null)
-            {
-                return;
-            }
-
-            var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Id != selectedId).Count();
-            PluginViewModel.Instance.Events[index] = logEvent;
-
-            ResetForm();
+            MainView.View.Events.UnselectAll();
+            MainView.View.TRegEx.Text = "";
+            MainView.View.TExecutable.Text = "";
         }
 
         /// <summary>
@@ -218,7 +205,8 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
                 return;
             }
-            var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Id.ToString() != selectedKey).Count();
+            var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Id.ToString() != selectedKey)
+                                       .Count();
             PluginViewModel.Instance.Events.RemoveAt(index);
         }
 
@@ -226,9 +214,10 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         /// </summary>
         private static void SelectExecutable()
         {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
+            var dialog = new OpenFileDialog();
 
-            if (dialog.ShowDialog().GetValueOrDefault())
+            if (dialog.ShowDialog()
+                      .GetValueOrDefault())
             {
                 MainView.View.TExecutable.Text = dialog.FileName;
             }
