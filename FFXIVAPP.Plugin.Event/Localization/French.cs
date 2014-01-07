@@ -18,7 +18,9 @@ namespace FFXIVAPP.Plugin.Event.Localization
         {
             Dictionary.Clear();
             Dictionary.Add("event_PLACEHOLDER", "*PH*");
-            Dictionary.Add("event_AddUpdateEventButtonText", "Ajouter ou mettre à jour un évenement");
+            //Dictionary.Add("event_AddUpdateEventButtonText", "Ajouter ou mettre à jour un évenement");
+            Dictionary.Add("event_UpdateEventButtonText", "Mettre à jour un évenement");
+            Dictionary.Add("event_AddEventButtonText", "Ajouter à jour un évenement");
             Dictionary.Add("event_RegExHeader", "RegEx");
             Dictionary.Add("event_RegExLabel", "RegEx:");
             Dictionary.Add("event_SampleText", "The scout vulture readies Wing Cutter.");
@@ -31,6 +33,9 @@ namespace FFXIVAPP.Plugin.Event.Localization
             Dictionary.Add("event_CategoryHeader", "Category");
             Dictionary.Add("event_MiscellaneousLabel", "Miscellaneous");
             Dictionary.Add("event_RefreshSoundListButtonText", "Refresh Sound List");
+            Dictionary.Add("event_ExecutableLabel", "Run:");
+            Dictionary.Add("event_SelectExecutableText", "Select File");
+            Dictionary.Add("event_ExecutableHeader", "Run");
             return Dictionary;
         }
     }

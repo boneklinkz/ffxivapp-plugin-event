@@ -214,22 +214,30 @@ namespace FFXIVAPP.Plugin.Event.Properties
             {
                 return;
             }
+
             Constants.XSettings.Descendants("Event")
-                     .Where(node => PluginViewModel.Instance.Events.All(e => e.RegEx != node.Attribute("Key")
-                                                                                            .Value))
+                     .Where(node => PluginViewModel.Instance.Events.All(e => e.Id.ToString() != node.Attribute("Key").Value))
                      .Remove();
-            var xElements = Constants.XSettings.Descendants()
-                                     .Elements("Event");
+
+            var xElements = Constants.XSettings.Descendants().Elements("Event");
             var enumerable = xElements as XElement[] ?? xElements.ToArray();
+
             foreach (var item in PluginViewModel.Instance.Events)
             {
+                var xId = item.Id != Guid.Empty ? item.Id : Guid.NewGuid();
                 var xRegEx = item.RegEx;
                 var xSound = item.Sound;
                 var xDelay = item.Delay;
                 var xCategory = item.Category;
                 var xEnabled = item.Enabled;
+                var xExecutable = item.Executable;
                 var keyPairList = new List<XValuePair>
                 {
+                    new XValuePair
+                    {
+                        Key = "RegEx",
+                        Value = xRegEx
+                    },
                     new XValuePair
                     {
                         Key = "Sound",
@@ -249,20 +257,35 @@ namespace FFXIVAPP.Plugin.Event.Properties
                     {
                         Key = "Enabled",
                         Value = xEnabled.ToString()
+                    },
+                    new XValuePair
+                    {
+                        Key = "Executable",
+                        Value = xExecutable
                     }
                 };
-                var element = enumerable.FirstOrDefault(e => e.Attribute("Key")
-                                                              .Value == xRegEx);
+
+                var element = enumerable.FirstOrDefault(e => e.Attribute("Key").Value == xId.ToString());
                 if (element == null)
                 {
-                    XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Event", xRegEx, keyPairList);
+                    XmlHelper.SaveXmlNode(Constants.XSettings, "Settings", "Event", xId.ToString(), keyPairList);
                 }
                 else
                 {
+                    var xIdElement = element.Element("Id");
+                    if (xIdElement != null)
+                    {
+                        xIdElement.Value = xId.ToString();
+                    }
+                    var xRegExElement = element.Element("RegEx");
+                    if (xRegExElement != null)
+                    {
+                        xRegExElement.Value = xRegEx;
+                    }
                     var xSoundElement = element.Element("Sound");
                     if (xSoundElement != null)
                     {
-                        xSoundElement.Value = xSound;
+                        xSoundElement.Value = !String.IsNullOrWhiteSpace(xSound) ? xSound : String.Empty;
                     }
                     var xDelayElement = element.Element("Delay");
                     if (xDelayElement != null)
@@ -278,6 +301,11 @@ namespace FFXIVAPP.Plugin.Event.Properties
                     if (xEnabledElement != null)
                     {
                         xEnabledElement.Value = xEnabled.ToString();
+                    }
+                    var xExecutableElement = element.Element("Executable");
+                    if (xExecutableElement != null)
+                    {
+                        xExecutableElement.Value = !String.IsNullOrWhiteSpace(xExecutable) ? xExecutable : String.Empty;
                     }
                 }
             }
