@@ -31,6 +31,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.Models;
 using FFXIVAPP.Common.RegularExpressions;
 using FFXIVAPP.Common.Utilities;
@@ -58,6 +59,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         #region Declarations
 
         public ICommand RefreshSoundListCommand { get; private set; }
+        public ICommand TestSoundCommand { get; private set; }
         public ICommand AddOrUpdateEventCommand { get; private set; }
         public ICommand DeleteEventCommand { get; private set; }
         public ICommand EventSelectionCommand { get; private set; }
@@ -70,6 +72,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         public MainViewModel()
         {
             RefreshSoundListCommand = new DelegateCommand(RefreshSoundList);
+            TestSoundCommand = new DelegateCommand(TestSound);
             AddOrUpdateEventCommand = new DelegateCommand(AddOrUpdateEvent);
             DeleteEventCommand = new DelegateCommand(DeleteEvent);
             EventSelectionCommand = new DelegateCommand(EventSelection);
@@ -118,6 +121,14 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             SetupGrouping();
         }
 
+        private static void TestSound()
+        {
+            if (MainView.View.TSound.Text.Trim() != "")
+            {
+                SoundPlayerHelper.PlayCached(MainView.View.TSound.Text, (int) (MainView.View.TVolume.Value * 100));
+            }
+        }
+
         /// <summary>
         /// </summary>
         private static void AddOrUpdateEvent()
@@ -127,24 +138,21 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             {
                 if (MainView.View.Events.SelectedItems.Count == 1)
                 {
-                    selectedId = new Guid(GetValueBySelectedItem(MainView.View.Events, "Id"));
+                    selectedId = new Guid(GetValueBySelectedItem(MainView.View.Events, "Key"));
                 }
             }
             catch (Exception ex)
             {
                 Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
             }
-
             if (MainView.View.TDelay.Text.Trim() == "" || MainView.View.TRegEx.Text.Trim() == "")
             {
                 return;
             }
-
             if (MainView.View.TCategory.Text.Trim() == "")
             {
                 MainView.View.TCategory.Text = PluginViewModel.Instance.Locale["event_MiscellaneousLabel"];
             }
-
             if (Regex.IsMatch(MainView.View.TDelay.Text, @"[^0-9]+"))
             {
                 var popupContent = new PopupContent
@@ -156,36 +164,31 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 Plugin.PHost.PopupMessage(Plugin.PName, popupContent);
                 return;
             }
-
             var logEvent = new LogEvent
             {
                 Sound = MainView.View.TSound.Text,
-                Delay = 0,
                 RegEx = MainView.View.TRegEx.Text,
                 Category = MainView.View.TCategory.Text,
-                Enabled = true,
-                Executable = MainView.View.TExecutable.Text
+                Executable = MainView.View.TExecutable.Text,
+                Volume = MainView.View.TVolume.Value * 100
             };
-
             int result;
             if (Int32.TryParse(MainView.View.TDelay.Text, out result))
             {
                 logEvent.Delay = result;
             }
-
             if (selectedId == Guid.Empty)
             {
-                logEvent.Id = Guid.NewGuid();
+                logEvent.Key = Guid.NewGuid();
                 PluginViewModel.Instance.Events.Add(logEvent);
             }
             else
             {
-                logEvent.Id = selectedId;
-                var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Id != selectedId)
+                logEvent.Key = selectedId;
+                var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Key != selectedId)
                                            .Count();
                 PluginViewModel.Instance.Events[index] = logEvent;
             }
-
             MainView.View.Events.UnselectAll();
             MainView.View.TRegEx.Text = "";
             MainView.View.TExecutable.Text = "";
@@ -198,14 +201,14 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             string selectedKey;
             try
             {
-                selectedKey = GetValueBySelectedItem(MainView.View.Events, "Id");
+                selectedKey = GetValueBySelectedItem(MainView.View.Events, "Key");
             }
             catch (Exception ex)
             {
                 Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
                 return;
             }
-            var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Id.ToString() != selectedKey)
+            var index = PluginViewModel.Instance.Events.TakeWhile(@event => @event.Key.ToString() != selectedKey)
                                        .Count();
             PluginViewModel.Instance.Events.RemoveAt(index);
         }
@@ -236,6 +239,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
                 return;
             }
             MainView.View.TSound.Text = GetValueBySelectedItem(MainView.View.Events, "Sound");
+            MainView.View.TVolume.Value = Convert.ToDouble(GetValueBySelectedItem(MainView.View.Events, "Volume")) / 100;
             MainView.View.TDelay.Text = GetValueBySelectedItem(MainView.View.Events, "Delay");
             MainView.View.TRegEx.Text = GetValueBySelectedItem(MainView.View.Events, "RegEx");
             MainView.View.TCategory.Text = GetValueBySelectedItem(MainView.View.Events, "Category");

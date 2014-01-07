@@ -81,65 +81,103 @@
     <Grid x:Name="LayoutRoot"
           DataContext="{StaticResource MainViewModel}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="33" />
-            <RowDefinition Height="33" />
+            <RowDefinition Height="{Binding ElementName=EventOptionsExpander,
+                                            Path=Height}" />
             <RowDefinition Height="*" />
             <RowDefinition Height="33" />
         </Grid.RowDefinitions>
-        <DockPanel Grid.Row="0"
-                   Margin="3"
-                   LastChildFill="True">
-            <Label VerticalContentAlignment="Center"
-                   Content="{Binding Locale[event_CategoryLabel],
-                                     Source={StaticResource PluginViewModel}}" />
-            <TextBox x:Name="TCategory"
-                     Width="100"
-                     VerticalContentAlignment="Center"
-                     Text="{Binding Locale[event_SampleCategory],
-                                    Source={StaticResource PluginViewModel}}" />
-            <Label VerticalContentAlignment="Center"
-                   Content="{Binding Locale[event_RegExLabel],
-                                     Source={StaticResource PluginViewModel}}" />
-            <TextBox x:Name="TRegEx"
-                     VerticalContentAlignment="Center"
-                     Text="{Binding Locale[event_SampleText],
-                                    Source={StaticResource PluginViewModel}}" />
-        </DockPanel>
+        <GroupBox x:Name="EventOptionsExpander"
+                  Grid.Row="0"
+                  Header="Event Options">
+            <StackPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="33" />
+                    </Grid.RowDefinitions>
+                    <DockPanel Grid.Row="0"
+                               Margin="3"
+                               LastChildFill="True">
+                        <Label VerticalContentAlignment="Center"
+                               Content="{Binding Locale[event_CategoryLabel],
+                                                 Source={StaticResource PluginViewModel}}" />
+                        <TextBox x:Name="TCategory"
+                                 Width="100"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding Locale[event_SampleCategory],
+                                                Source={StaticResource PluginViewModel}}" />
+                        <Label VerticalContentAlignment="Center"
+                               Content="{Binding Locale[event_DelayLabel],
+                                                 Source={StaticResource PluginViewModel}}" />
+                        <TextBox x:Name="TDelay"
+                                 Width="40"
+                                 HorizontalContentAlignment="Center"
+                                 VerticalContentAlignment="Center"
+                                 Text="0" />
+                        <Label VerticalContentAlignment="Center"
+                               Content="{Binding Locale[event_RegExLabel],
+                                                 Source={StaticResource PluginViewModel}}" />
+                        <TextBox x:Name="TRegEx"
+                                 VerticalContentAlignment="Center"
+                                 Text="{Binding Locale[event_SampleText],
+                                                Source={StaticResource PluginViewModel}}" />
+                    </DockPanel>
+                </Grid>
+                <Expander Header="Sound Options">
+                    <DockPanel Margin="3"
+                               LastChildFill="True">
+                        <Label VerticalContentAlignment="Center"
+                               Content="{Binding Locale[event_SoundLabel],
+                                                 Source={StaticResource PluginViewModel}}" />
+                        <ComboBox x:Name="TSound"
+                                  Width="120"
+                                  IsReadOnly="False"
+                                  ItemsSource="{Binding SoundFiles,
+                                                        Source={StaticResource PluginViewModel}}" />
+                        <Label VerticalContentAlignment="Center"
+                               Content="{Binding Locale[event_VolumeLabel],
+                                                 Source={StaticResource PluginViewModel}}" />
+                        <TextBlock Width="50"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding ElementName=TVolume,
+                                                  Path=Value,
+                                                  StringFormat=\{0:P2\}}" />
+                        <Button Margin="3 0 0 0"
+                                Command="{Binding TestSoundCommand}"
+                                Content="{Binding Locale[event_TestSoundButtonText],
+                                                  Source={StaticResource PluginViewModel}}"
+                                DockPanel.Dock="Right" />
+                        <Slider x:Name="TVolume"
+                                IsSnapToTickEnabled="True"
+                                Maximum="1"
+                                Minimum="0"
+                                TickFrequency="0.025"
+                                TickPlacement="BottomRight"
+                                Value="1" />
+                    </DockPanel>
+                </Expander>
+                <Expander Header="Executable Options">
+                    <DockPanel Margin="3"
+                               LastChildFill="True">
+                        <Label VerticalContentAlignment="Center"
+                               Content="{Binding Locale[event_ExecutableLabel],
+                                                 Source={StaticResource PluginViewModel}}" />
+                        <Button Margin="3 0 0 0"
+                                VerticalContentAlignment="Center"
+                                Command="{Binding SelectExecutableCommand}"
+                                Content="{Binding Locale[event_SelectExecutableButtonText],
+                                                  Source={StaticResource PluginViewModel}}"
+                                DockPanel.Dock="Right" />
+                        <TextBox x:Name="TExecutable"
+                                 VerticalContentAlignment="Center"
+                                 DockPanel.Dock="Left"
+                                 Text="{Binding Locale[event_SampleExecutable],
+                                                Source={StaticResource PluginViewModel}}" />
+                    </DockPanel>
+                </Expander>
+            </StackPanel>
+        </GroupBox>
+
         <DockPanel Grid.Row="1"
-                   Margin="3"
-                   LastChildFill="True">
-            <Label VerticalContentAlignment="Center"
-                   Content="{Binding Locale[event_DelayLabel],
-                                     Source={StaticResource PluginViewModel}}" />
-            <TextBox x:Name="TDelay"
-                     Width="40"
-                     HorizontalContentAlignment="Center"
-                     VerticalContentAlignment="Center"
-                     Text="0" />
-            <Label VerticalContentAlignment="Center"
-                   Content="{Binding Locale[event_SoundLabel],
-                                     Source={StaticResource PluginViewModel}}" />
-            <ComboBox x:Name="TSound"
-                      Width="120"
-                      IsReadOnly="False"
-                      ItemsSource="{Binding SoundFiles,
-                                            Source={StaticResource PluginViewModel}}" />
-            <Label VerticalContentAlignment="Center"
-                   Content="{Binding Locale[event_ExecutableLabel],
-                                     Source={StaticResource PluginViewModel}}" />
-            <Button Margin="3 0 0 0"
-                    VerticalContentAlignment="Center"
-                    Command="{Binding SelectExecutableCommand}"
-                    Content="{Binding Locale[event_SelectExecutableButtonText],
-                                      Source={StaticResource PluginViewModel}}"
-                    DockPanel.Dock="Right" />
-            <TextBox x:Name="TExecutable"
-                     VerticalContentAlignment="Center"
-                     DockPanel.Dock="Left"
-                     Text="{Binding Locale[event_SampleExecutable],
-                                    Source={StaticResource PluginViewModel}}" />
-        </DockPanel>
-        <DockPanel Grid.Row="2"
                    Margin="3"
                    LastChildFill="True">
             <DataGrid x:Name="Events"
@@ -212,15 +250,20 @@
                                                          Source={StaticResource PluginViewModel}}"
                                         IsReadOnly="True"
                                         Utilities:GridViewSort.PropertyName="Sound" />
+                    <DataGridTextColumn Binding="{Binding Volume}"
+                                        Header="{Binding Locale[event_VolumeHeader],
+                                                         Source={StaticResource PluginViewModel}}"
+                                        IsReadOnly="True"
+                                        Utilities:GridViewSort.PropertyName="Sound" />
                     <DataGridTextColumn Binding="{Binding Executable}"
                                         Header="{Binding Locale[event_ExecutableHeader],
                                                          Source={StaticResource PluginViewModel}}"
                                         IsReadOnly="True"
-                                        Utilities:GridViewSort.PropertyName="Delay" />
+                                        Utilities:GridViewSort.PropertyName="Executable" />
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <DockPanel Grid.Row="3"
+        <DockPanel Grid.Row="2"
                    Margin="3"
                    LastChildFill="True">
             <Button MinWidth="28"

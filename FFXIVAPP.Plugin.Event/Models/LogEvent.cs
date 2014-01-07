@@ -30,20 +30,32 @@ namespace FFXIVAPP.Plugin.Event.Models
 {
     public class LogEvent : INotifyPropertyChanged
     {
+        public LogEvent()
+        {
+            Delay = 0;
+            Enabled = true;
+            Executable = "";
+            Sound = "";
+            Volume = 100;
+        }
+
+        #region Property Bindings
+
         private string _category;
         private int _delay;
         private bool _enabled;
         private string _executable;
-        private Guid _id;
+        private Guid _key;
         private string _regEx;
         private string _sound;
+        private double _volume;
 
-        public Guid Id
+        public Guid Key
         {
-            get { return _id; }
+            get { return _key; }
             set
             {
-                _id = value;
+                _key = value;
                 RaisePropertyChanged();
             }
         }
@@ -54,6 +66,16 @@ namespace FFXIVAPP.Plugin.Event.Models
             set
             {
                 _sound = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public double Volume
+        {
+            get { return _volume; }
+            set
+            {
+                _volume = value;
                 RaisePropertyChanged();
             }
         }
@@ -107,6 +129,8 @@ namespace FFXIVAPP.Plugin.Event.Models
                 RaisePropertyChanged();
             }
         }
+
+        #endregion
 
         #region Implementation of INotifyPropertyChanged
 

@@ -4,6 +4,7 @@
 	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=231397FF2FDD0841AD57B59F9D735B85/RelativePath/@EntryValue">..\ReSharper.DotSettings</s:String>
 	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File231397FF2FDD0841AD57B59F9D735B85/@KeyIndexDefined">True</s:Boolean>
 	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=File231397FF2FDD0841AD57B59F9D735B85/RelativePriority/@EntryValue">1</s:Double>
+	<s:Boolean x:Key="/Default/Environment/SearchAndNavigation/MergeOccurences/@EntryValue">False</s:Boolean>
 	
 	
 	

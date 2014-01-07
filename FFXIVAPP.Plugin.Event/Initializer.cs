@@ -93,11 +93,12 @@ namespace FFXIVAPP.Plugin.Event
                 foreach (var xElement in Constants.XSettings.Descendants()
                                                   .Elements("Event"))
                 {
-                    var xId = Guid.Empty;
+                    var xKey = Guid.Empty;
                     // migrate regex from key, if necessary
                     var xRegEx = xElement.Element("RegEx") != null ? (string) xElement.Element("RegEx") : (string) xElement.Attribute("Key");
                     var xValue = (string) xElement.Element("Value");
                     var xSound = (string) xElement.Element("Sound");
+                    double xVolume = 100;
                     var xDelay = (string) xElement.Element("Delay");
                     var xCategory = (string) xElement.Element("Category");
                     var xExecutable = (string) xElement.Element("Executable");
@@ -111,7 +112,14 @@ namespace FFXIVAPP.Plugin.Event
                     }
                     try
                     {
-                        xId = (Guid) xElement.Element("Id");
+                        xVolume = Double.Parse((string) xElement.Element("Volume"));
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    try
+                    {
+                        xKey = (Guid) xElement.Attribute("Key");
                     }
                     catch (Exception)
                     {
@@ -120,14 +128,14 @@ namespace FFXIVAPP.Plugin.Event
                     {
                         continue;
                     }
-                    xId = xId != Guid.Empty ? xId : Guid.NewGuid();
+                    xKey = xKey != Guid.Empty ? xKey : Guid.NewGuid();
                     xSound = String.IsNullOrWhiteSpace(xValue) ? xSound : xValue;
-                    xCategory = String.IsNullOrWhiteSpace(xCategory) ? "Miscellaneous" : xCategory;
+                    xCategory = String.IsNullOrWhiteSpace(xCategory) ? PluginViewModel.Instance.Locale["event_MiscellaneousLabel"] : xCategory;
                     var logEvent = new LogEvent
                     {
-                        Id = xId,
+                        Key = xKey,
                         Sound = xSound,
-                        Delay = 0,
+                        Volume = xVolume,
                         RegEx = xRegEx,
                         Category = xCategory,
                         Enabled = xEnabled,
@@ -138,7 +146,7 @@ namespace FFXIVAPP.Plugin.Event
                     {
                         logEvent.Delay = result;
                     }
-                    var found = PluginViewModel.Instance.Events.Any(@event => @event.Id == logEvent.Id);
+                    var found = PluginViewModel.Instance.Events.Any(@event => @event.Key == logEvent.Key);
                     if (!found)
                     {
                         PluginViewModel.Instance.Events.Add(logEvent);

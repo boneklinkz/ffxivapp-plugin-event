@@ -53,6 +53,9 @@ namespace FFXIVAPP.Plugin.Event.Localization
             Dictionary.Add("event_ExecutableLabel", "Run:");
             Dictionary.Add("event_SelectExecutableButtonText", "Select Executable");
             Dictionary.Add("event_ExecutableHeader", "Run");
+            Dictionary.Add("event_VolumeHeader", "Volume");
+            Dictionary.Add("event_VolumeLabel", "Volume:");
+            Dictionary.Add("event_TestSoundButtonText", "Test");
             return Dictionary;
         }
     }

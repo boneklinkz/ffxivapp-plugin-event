@@ -88,7 +88,7 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                 ElapsedEventHandler timerEventHandler = null;
                 timerEventHandler = delegate
                 {
-                    DispatcherHelper.Invoke(() => SoundPlayerHelper.PlayCached(logEvent.Sound));
+                    DispatcherHelper.Invoke(() => SoundPlayerHelper.PlayCached(logEvent.Sound, (int) logEvent.Volume));
                     timer.Elapsed -= timerEventHandler;
                 };
                 timer.Elapsed += timerEventHandler;
