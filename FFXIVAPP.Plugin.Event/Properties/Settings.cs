@@ -29,6 +29,7 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Media;
@@ -58,7 +59,7 @@ namespace FFXIVAPP.Plugin.Event.Properties
             DefaultSettings();
             SaveSettingsNode();
             SaveEventsNode();
-            Constants.XSettings.Save(Common.Constants.PluginsSettingsPath + "FFXIVAPP.Plugin.Event.xml");
+            Constants.XSettings.Save(Path.Combine(Common.Constants.PluginsSettingsPath, "FFXIVAPP.Plugin.Event.xml"));
         }
 
         private void DefaultSettings()

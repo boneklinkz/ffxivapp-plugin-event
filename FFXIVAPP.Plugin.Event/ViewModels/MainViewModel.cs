@@ -117,7 +117,7 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         /// </summary>
         private static void RefreshSoundList()
         {
-            Initializer.LoadSounds();
+            Initializer.LoadSoundsAndCache();
             SetupGrouping();
         }
 

@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Xml.Linq;
 using FFXIVAPP.Common.Helpers;
 
@@ -35,8 +36,6 @@ namespace FFXIVAPP.Plugin.Event
     {
         #region Declarations
 
-        public const string BaseDirectory = "./Plugins/FFXIVAPP.Plugin.Event/";
-
         public const string LibraryPack = "pack://application:,,,/FFXIVAPP.Plugin.Event;component/";
 
         public static readonly string[] Supported =
@@ -45,6 +44,15 @@ namespace FFXIVAPP.Plugin.Event
         };
 
         public static StringComparison InvariantComparer = StringComparison.InvariantCultureIgnoreCase;
+
+        public static string BaseDirectory
+        {
+            get
+            {
+                return Path.GetDirectoryName(Assembly.GetExecutingAssembly()
+                                                     .Location);
+            }
+        }
 
         #endregion
 
@@ -57,7 +65,7 @@ namespace FFXIVAPP.Plugin.Event
         {
             get
             {
-                var file = Common.Constants.PluginsSettingsPath + "FFXIVAPP.Plugin.Event.xml";
+                var file = Path.Combine(Common.Constants.PluginsSettingsPath, "FFXIVAPP.Plugin.Event.xml");
                 var legacyFile = "./Plugins/FFXIVAPP.Plugin.Event/Settings.xml";
                 if (_xSettings != null)
                 {

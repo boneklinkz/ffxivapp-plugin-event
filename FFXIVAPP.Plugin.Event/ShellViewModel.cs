@@ -49,7 +49,7 @@ namespace FFXIVAPP.Plugin.Event
         public ShellViewModel()
         {
             Initializer.LoadSettings();
-            Initializer.LoadSounds();
+            Initializer.LoadSoundsAndCache();
             Initializer.LoadLogEvents();
             Settings.Default.PropertyChanged += DefaultOnPropertyChanged;
         }

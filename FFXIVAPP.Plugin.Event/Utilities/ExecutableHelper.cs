@@ -39,7 +39,6 @@ namespace FFXIVAPP.Plugin.Event.Utilities
             {
                 return;
             }
-
             try
             {
                 DispatcherHelper.Invoke(() => Process.Start(path));

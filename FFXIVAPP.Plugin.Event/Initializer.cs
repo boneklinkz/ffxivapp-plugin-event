@@ -23,9 +23,9 @@
 // USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Plugin.Event.Models;
@@ -61,24 +61,50 @@ namespace FFXIVAPP.Plugin.Event
             }
         }
 
-        public static void LoadSounds()
+        public static void LoadSoundsAndCache()
         {
             PluginViewModel.Instance.SoundFiles.Clear();
             //do your gui stuff here
-            var legacyFiles = Directory.GetFiles(Constants.BaseDirectory)
-                                       .Where(file => Regex.IsMatch(file, @"^.+\.(wav|mp3)$"))
-                                       .Select(file => new FileInfo(file));
-            foreach (var fileInfo in legacyFiles)
+            var legacyFiles = new List<FileInfo>();
+            var filters = new List<string>
             {
-                var fileName = Path.GetFileName(fileInfo.FullName);
-                if (File.Exists(Path.Combine(Common.Constants.SoundsPath, fileName)))
+                "*.wav",
+                "*.mp3"
+            };
+            foreach (var filter in filters)
+            {
+                var files = Directory.GetFiles(Constants.BaseDirectory, filter, SearchOption.AllDirectories)
+                                     .Select(file => new FileInfo(file));
+                legacyFiles.AddRange(files);
+            }
+            foreach (var legacyFile in legacyFiles)
+            {
+                if (legacyFile.DirectoryName == null)
                 {
                     continue;
                 }
-                File.Copy(fileInfo.FullName, Path.Combine(Common.Constants.SoundsPath, fileName));
-                SoundPlayerHelper.TryGetSetSoundFile(fileName);
+                var baseKey = legacyFile.DirectoryName.Replace(Constants.BaseDirectory, "");
+                var key = String.IsNullOrWhiteSpace(baseKey) ? legacyFile.Name : String.Format("{0}\\{1}", baseKey.Substring(1), legacyFile.Name);
+                if (File.Exists(Path.Combine(Common.Constants.SoundsPath, key)))
+                {
+                    continue;
+                }
+                try
+                {
+                    var directoryKey = String.IsNullOrWhiteSpace(baseKey) ? "" : baseKey.Substring(1);
+                    var directory = Path.Combine(Common.Constants.SoundsPath, directoryKey);
+                    if (!Directory.Exists(directory))
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+                    File.Copy(legacyFile.FullName, Path.Combine(Common.Constants.SoundsPath, key));
+                    SoundPlayerHelper.TryGetSetSoundFile(key);
+                }
+                catch (Exception ex)
+                {
+                }
             }
-            foreach (var cachedSoundFile in SoundPlayerHelper.GetSoundFiles())
+            foreach (var cachedSoundFile in SoundPlayerHelper.SoundFileKeys())
             {
                 PluginViewModel.Instance.SoundFiles.Add(cachedSoundFile);
             }
