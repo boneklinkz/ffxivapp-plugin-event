@@ -264,22 +264,23 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
         private static void ToggleCategory(string categoryName)
         {
-            var categoryRegEx = new Regex(@"(?<category>.+) \(\d+\)", SharedRegEx.DefaultOptions);
+            var categoryRegEx = new Regex(@"(?<category>.+) \(\d+\)$", SharedRegEx.DefaultOptions);
             var matches = categoryRegEx.Match(categoryName);
             if (!matches.Success)
             {
                 return;
             }
             MainView.View.Events.SelectedItem = null;
-            var name = matches.Groups["category"].Value;
+            var category = matches.Groups["category"].Value;
             var events = new List<LogEvent>(PluginViewModel.Instance.Events.ToList());
-            var enabledCount = PluginViewModel.Instance.Events.Count(@event => @event.Enabled);
-            var enable = enabledCount == 0 || (enabledCount < PluginViewModel.Instance.Events.Count);
+            var enabledCount = events.Where(@event => @event.Category == category)
+                                     .Count(@event => @event.Enabled);
+            var enable = enabledCount == 0 || (enabledCount < events.Count(@event => @event.Category == category));
             if (enable)
             {
-                for (var i = 0; i < @events.Count; i++)
+                for (var i = 0; i < events.Count; i++)
                 {
-                    if (@events[i].Category == name)
+                    if (events[i].Category == category)
                     {
                         PluginViewModel.Instance.Events[i].Enabled = true;
                     }
@@ -287,9 +288,9 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
             }
             else
             {
-                for (var i = 0; i < @events.Count; i++)
+                for (var i = 0; i < events.Count; i++)
                 {
-                    if (@events[i].Category == name)
+                    if (events[i].Category == category)
                     {
                         PluginViewModel.Instance.Events[i].Enabled = false;
                     }

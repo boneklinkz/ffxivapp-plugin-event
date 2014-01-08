@@ -88,6 +88,7 @@
         </Grid.RowDefinitions>
         <GroupBox x:Name="EventOptionsExpander"
                   Grid.Row="0"
+                  Margin="3"
                   Header="Event Options">
             <StackPanel>
                 <Grid>
@@ -176,93 +177,90 @@
                 </Expander>
             </StackPanel>
         </GroupBox>
-
-        <DockPanel Grid.Row="1"
-                   Margin="3"
-                   LastChildFill="True">
-            <DataGrid x:Name="Events"
-                      AutoGenerateColumns="False"
-                      BorderBrush="{DynamicResource AccentColorBrush}"
-                      BorderThickness="1"
-                      CanUserAddRows="False"
-                      ItemsSource="{Binding Events,
-                                            Source={StaticResource PluginViewModel}}"
-                      SelectionMode="Single"
-                      Utilities:SelectionBehavior.SelectionChanged="{Binding EventSelectionCommand}">
-                <DataGrid.GroupStyle>
-                    <!--  Style for groups at top level.  -->
-                    <GroupStyle>
-                        <GroupStyle.ContainerStyle>
-                            <Style TargetType="{x:Type GroupItem}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type GroupItem}">
-                                            <Expander Header="{Binding ElementName=CategoryInfo,
-                                                                       Path=Text}"
-                                                      HeaderTemplate="{StaticResource EventHeaderTemplate}"
-                                                      IsExpanded="False">
-                                                <Expander.Content>
-                                                    <StackPanel>
-                                                        <TextBlock x:Name="CategoryInfo"
-                                                                   Visibility="Collapsed">
-                                                            <TextBlock.Text>
-                                                                <MultiBinding Converter="{StaticResource NameMultiValueConverter}">
-                                                                    <Binding Path="Name" />
-                                                                    <Binding Path="ItemCount" />
-                                                                </MultiBinding>
-                                                            </TextBlock.Text>
-                                                        </TextBlock>
-                                                        <ItemsPresenter />
-                                                    </StackPanel>
-                                                </Expander.Content>
-                                            </Expander>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </GroupStyle.ContainerStyle>
-                    </GroupStyle>
-                </DataGrid.GroupStyle>
-                <DataGrid.Columns>
-                    <!--
-                        <DataGridTextColumn Binding="{Binding Category}"
-                        Header="{Binding Locale[event_CategoryHeader],
-                        Source={StaticResource PluginViewModel}}"
-                        IsReadOnly="True"
-                        Utilities:GridViewSort.PropertyName="Category" />
-                    -->
-                    <DataGridCheckBoxColumn Binding="{Binding Enabled}"
-                                            Header="{Binding Locale[event_EnabledHeader],
-                                                             Source={StaticResource PluginViewModel}}"
-                                            Utilities:GridViewSort.PropertyName="Enabled" />
-                    <DataGridTextColumn Binding="{Binding RegEx}"
-                                        Header="{Binding Locale[event_RegExHeader],
+        <DataGrid x:Name="Events"
+                  Grid.Row="1"
+                  Margin="3"
+                  AutoGenerateColumns="False"
+                  BorderBrush="{DynamicResource AccentColorBrush}"
+                  BorderThickness="1"
+                  CanUserAddRows="False"
+                  ItemsSource="{Binding Events,
+                                        Source={StaticResource PluginViewModel}}"
+                  SelectionMode="Single"
+                  Utilities:SelectionBehavior.SelectionChanged="{Binding EventSelectionCommand}">
+            <DataGrid.GroupStyle>
+                <!--  Style for groups at top level.  -->
+                <GroupStyle>
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander Header="{Binding ElementName=CategoryInfo,
+                                                                   Path=Text}"
+                                                  HeaderTemplate="{StaticResource EventHeaderTemplate}"
+                                                  IsExpanded="False">
+                                            <Expander.Content>
+                                                <StackPanel>
+                                                    <TextBlock x:Name="CategoryInfo"
+                                                               Visibility="Collapsed">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding Converter="{StaticResource NameMultiValueConverter}">
+                                                                <Binding Path="Name" />
+                                                                <Binding Path="ItemCount" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    <ItemsPresenter />
+                                                </StackPanel>
+                                            </Expander.Content>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+            <DataGrid.Columns>
+                <!--
+                    <DataGridTextColumn Binding="{Binding Category}"
+                    Header="{Binding Locale[event_CategoryHeader],
+                    Source={StaticResource PluginViewModel}}"
+                    IsReadOnly="True"
+                    Utilities:GridViewSort.PropertyName="Category" />
+                -->
+                <DataGridCheckBoxColumn Binding="{Binding Enabled}"
+                                        Header="{Binding Locale[event_EnabledHeader],
                                                          Source={StaticResource PluginViewModel}}"
-                                        IsReadOnly="True"
-                                        Utilities:GridViewSort.PropertyName="RegEx" />
-                    <DataGridTextColumn Binding="{Binding Delay}"
-                                        Header="{Binding Locale[event_DelayHeader],
-                                                         Source={StaticResource PluginViewModel}}"
-                                        IsReadOnly="True"
-                                        Utilities:GridViewSort.PropertyName="Delay" />
-                    <DataGridTextColumn Binding="{Binding Sound}"
-                                        Header="{Binding Locale[event_SoundHeader],
-                                                         Source={StaticResource PluginViewModel}}"
-                                        IsReadOnly="True"
-                                        Utilities:GridViewSort.PropertyName="Sound" />
-                    <DataGridTextColumn Binding="{Binding Volume}"
-                                        Header="{Binding Locale[event_VolumeHeader],
-                                                         Source={StaticResource PluginViewModel}}"
-                                        IsReadOnly="True"
-                                        Utilities:GridViewSort.PropertyName="Sound" />
-                    <DataGridTextColumn Binding="{Binding Executable}"
-                                        Header="{Binding Locale[event_ExecutableHeader],
-                                                         Source={StaticResource PluginViewModel}}"
-                                        IsReadOnly="True"
-                                        Utilities:GridViewSort.PropertyName="Executable" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </DockPanel>
+                                        Utilities:GridViewSort.PropertyName="Enabled" />
+                <DataGridTextColumn Binding="{Binding RegEx}"
+                                    Header="{Binding Locale[event_RegExHeader],
+                                                     Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True"
+                                    Utilities:GridViewSort.PropertyName="RegEx" />
+                <DataGridTextColumn Binding="{Binding Delay}"
+                                    Header="{Binding Locale[event_DelayHeader],
+                                                     Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True"
+                                    Utilities:GridViewSort.PropertyName="Delay" />
+                <DataGridTextColumn Binding="{Binding Sound}"
+                                    Header="{Binding Locale[event_SoundHeader],
+                                                     Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True"
+                                    Utilities:GridViewSort.PropertyName="Sound" />
+                <DataGridTextColumn Binding="{Binding Volume}"
+                                    Header="{Binding Locale[event_VolumeHeader],
+                                                     Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True"
+                                    Utilities:GridViewSort.PropertyName="Sound" />
+                <DataGridTextColumn Binding="{Binding Executable}"
+                                    Header="{Binding Locale[event_ExecutableHeader],
+                                                     Source={StaticResource PluginViewModel}}"
+                                    IsReadOnly="True"
+                                    Utilities:GridViewSort.PropertyName="Executable" />
+            </DataGrid.Columns>
+        </DataGrid>
         <DockPanel Grid.Row="2"
                    Margin="3"
                    LastChildFill="True">
