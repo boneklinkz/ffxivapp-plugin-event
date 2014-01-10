@@ -30,6 +30,7 @@ using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Common.RegularExpressions;
 using FFXIVAPP.Common.Utilities;
 using FFXIVAPP.Plugin.Event.Models;
+using FFXIVAPP.Plugin.Event.Properties;
 using NLog;
 
 namespace FFXIVAPP.Plugin.Event.Utilities
@@ -88,7 +89,11 @@ namespace FFXIVAPP.Plugin.Event.Utilities
                 ElapsedEventHandler timerEventHandler = null;
                 timerEventHandler = delegate
                 {
-                    DispatcherHelper.Invoke(() => SoundPlayerHelper.PlayCached(logEvent.Sound, (int) logEvent.Volume));
+                    DispatcherHelper.Invoke(delegate
+                    {
+                        var volume = logEvent.Volume * Settings.Default.GlobalVolume;
+                        SoundPlayerHelper.PlayCached(logEvent.Sound, (int) volume);
+                    });
                     timer.Elapsed -= timerEventHandler;
                 };
                 timer.Elapsed += timerEventHandler;

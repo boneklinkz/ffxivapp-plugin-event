@@ -29,6 +29,7 @@ using System.Linq;
 using System.Xml.Linq;
 using FFXIVAPP.Common.Helpers;
 using FFXIVAPP.Plugin.Event.Models;
+using FFXIVAPP.Plugin.Event.Properties;
 using FFXIVAPP.Plugin.Event.ViewModels;
 
 namespace FFXIVAPP.Plugin.Event
@@ -52,7 +53,7 @@ namespace FFXIVAPP.Plugin.Event
                     {
                         continue;
                     }
-                    //SettingsHelper.Event.SetValue(xKey, xValue);
+                    Settings.SetValue(xKey, xValue);
                     if (!Constants.Settings.Contains(xKey))
                     {
                         Constants.Settings.Add(xKey);

@@ -37,6 +37,7 @@ using FFXIVAPP.Common.RegularExpressions;
 using FFXIVAPP.Common.Utilities;
 using FFXIVAPP.Common.ViewModelBase;
 using FFXIVAPP.Plugin.Event.Models;
+using FFXIVAPP.Plugin.Event.Properties;
 using FFXIVAPP.Plugin.Event.Views;
 using Microsoft.Win32;
 using NLog;
@@ -123,10 +124,12 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
         private static void TestSound()
         {
-            if (MainView.View.TSound.Text.Trim() != "")
+            if (MainView.View.TSound.Text.Trim() == "")
             {
-                SoundPlayerHelper.PlayCached(MainView.View.TSound.Text, (int) (MainView.View.TVolume.Value * 100));
+                return;
             }
+            var volume = (MainView.View.TVolume.Value * 100) * Settings.Default.GlobalVolume;
+            SoundPlayerHelper.PlayCached(MainView.View.TSound.Text, (int) volume);
         }
 
         /// <summary>

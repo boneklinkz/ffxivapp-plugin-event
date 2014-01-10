@@ -65,6 +65,7 @@ namespace FFXIVAPP.Plugin.Event.Properties
         private void DefaultSettings()
         {
             Constants.Settings.Clear();
+            Constants.Settings.Add("GlobalVolume");
         }
 
         public new void Reset()
@@ -171,6 +172,19 @@ namespace FFXIVAPP.Plugin.Event.Properties
             set
             {
                 this["Zoom"] = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        [UserScopedSetting]
+        [DebuggerNonUserCode]
+        [DefaultSettingValue("1")]
+        public Double GlobalVolume
+        {
+            get { return ((Double) (this["GlobalVolume"])); }
+            set
+            {
+                this["GlobalVolume"] = value;
                 RaisePropertyChanged();
             }
         }

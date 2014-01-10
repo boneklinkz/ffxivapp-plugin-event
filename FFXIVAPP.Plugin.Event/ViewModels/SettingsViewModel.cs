@@ -24,6 +24,11 @@
 
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using FFXIVAPP.Common.Helpers;
+using FFXIVAPP.Common.ViewModelBase;
+using FFXIVAPP.Plugin.Event.Properties;
+using FFXIVAPP.Plugin.Event.Views;
 
 namespace FFXIVAPP.Plugin.Event.ViewModels
 {
@@ -42,7 +47,14 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
 
         #region Declarations
 
+        public ICommand TestSoundCommand { get; private set; }
+
         #endregion
+
+        public SettingsViewModel()
+        {
+            TestSoundCommand = new DelegateCommand(TestSound);
+        }
 
         #region Loading Functions
 
@@ -53,6 +65,16 @@ namespace FFXIVAPP.Plugin.Event.ViewModels
         #endregion
 
         #region Command Bindings
+
+        private static void TestSound()
+        {
+            if (SettingsView.View.TSound.Text.Trim() == "")
+            {
+                return;
+            }
+            var volume = Settings.Default.GlobalVolume * 100;
+            SoundPlayerHelper.PlayCached(SettingsView.View.TSound.Text, (int) volume);
+        }
 
         #endregion
 

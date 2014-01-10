@@ -21,16 +21,48 @@
 
     <Grid x:Name="LayoutRoot"
           DataContext="{StaticResource SettingsViewModel}">
-        <StackPanel>
-            <FlowDocumentScrollViewer ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                <FlowDocument>
-                    <Paragraph FontSize="12">
-                        <Run Foreground="{DynamicResource TextBrush}"
-                             Text="{Binding Locale[app_ComingSoonText],
-                                            Source={StaticResource PluginViewModel}}" />
-                    </Paragraph>
-                </FlowDocument>
-            </FlowDocumentScrollViewer>
-        </StackPanel>
+        <TabControl>
+            <TabItem Header="{Binding Locale[app_MainSettingsTabHeader],
+                                      Source={StaticResource PluginViewModel}}">
+                <ScrollViewer>
+                    <StackPanel>
+                        <GroupBox Header="Global Volume">
+                            <DockPanel Margin="3"
+                                       LastChildFill="True">
+                                <Label VerticalContentAlignment="Center"
+                                       Content="{Binding Locale[event_SoundLabel],
+                                                         Source={StaticResource PluginViewModel}}" />
+                                <ComboBox x:Name="TSound"
+                                          Width="120"
+                                          IsReadOnly="False"
+                                          ItemsSource="{Binding SoundFiles,
+                                                                Source={StaticResource PluginViewModel}}" />
+                                <Label VerticalContentAlignment="Center"
+                                       Content="{Binding Locale[event_VolumeLabel],
+                                                         Source={StaticResource PluginViewModel}}" />
+                                <TextBlock Width="50"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding ElementName=TVolume,
+                                                          Path=Value,
+                                                          StringFormat=\{0:P2\}}" />
+                                <Button Margin="3 0 0 0"
+                                        Command="{Binding TestSoundCommand}"
+                                        Content="{Binding Locale[event_TestSoundButtonText],
+                                                          Source={StaticResource PluginViewModel}}"
+                                        DockPanel.Dock="Right" />
+                                <Slider x:Name="TVolume"
+                                        IsSnapToTickEnabled="True"
+                                        Maximum="1"
+                                        Minimum="0"
+                                        TickFrequency="0.025"
+                                        TickPlacement="BottomRight"
+                                        Value="{Binding GlobalVolume,
+                                                        Source={StaticResource Settings}}" />
+                            </DockPanel>
+                        </GroupBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>
