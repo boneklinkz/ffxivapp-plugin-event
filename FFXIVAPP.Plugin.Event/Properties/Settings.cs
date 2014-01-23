@@ -79,11 +79,11 @@ namespace FFXIVAPP.Plugin.Event.Properties
                     continue;
                 }
                 var value = settingsProperty.DefaultValue.ToString();
-                SetValue(key, value);
+                SetValue(key, value, CultureInfo.InvariantCulture);
             }
         }
 
-        public static void SetValue(string key, string value)
+        public static void SetValue(string key, string value, CultureInfo cultureInfo)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace FFXIVAPP.Plugin.Event.Properties
                 switch (type)
                 {
                     case "Boolean":
-                        Default[key] = Convert.ToBoolean(value);
+                        Default[key] = Boolean.Parse(value);
                         break;
                     case "Color":
                         var cc = new ColorConverter();
@@ -100,23 +100,22 @@ namespace FFXIVAPP.Plugin.Event.Properties
                         Default[key] = color ?? Colors.Black;
                         break;
                     case "Double":
-                        Default[key] = Convert.ToDouble(value);
+                        Default[key] = Double.Parse(value, cultureInfo);
                         break;
                     case "Font":
                         var fc = new FontConverter();
                         var font = fc.ConvertFromString(value);
                         Default[key] = font ?? new Font(new FontFamily("Microsoft Sans Serif"), 12);
                         break;
+                    case "Int32":
+                        Default[key] = Int32.Parse(value, cultureInfo);
+                        break;
                     default:
                         Default[key] = value;
                         break;
                 }
             }
-            catch (SettingsPropertyNotFoundException ex)
-            {
-                Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
-            }
-            catch (SettingsPropertyWrongTypeException ex)
+            catch (Exception ex)
             {
                 Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
             }

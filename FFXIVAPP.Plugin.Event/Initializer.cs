@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -44,6 +45,7 @@ namespace FFXIVAPP.Plugin.Event
         {
             if (Constants.XSettings != null)
             {
+                Settings.Default.Reset();
                 foreach (var xElement in Constants.XSettings.Descendants()
                                                   .Elements("Setting"))
                 {
@@ -53,8 +55,11 @@ namespace FFXIVAPP.Plugin.Event
                     {
                         continue;
                     }
-                    Settings.SetValue(xKey, xValue);
-                    if (!Constants.Settings.Contains(xKey))
+                    if (Constants.Settings.Contains(xKey))
+                    {
+                        Settings.SetValue(xKey, xValue, CultureInfo.InvariantCulture);
+                    }
+                    else
                     {
                         Constants.Settings.Add(xKey);
                     }
