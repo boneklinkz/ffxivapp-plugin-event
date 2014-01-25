@@ -29,19 +29,20 @@
                         <GroupBox Header="Global Volume">
                             <DockPanel Margin="3"
                                        LastChildFill="True">
-                                <Label VerticalContentAlignment="Center"
-                                       Content="{Binding Locale[event_SoundLabel],
-                                                         Source={StaticResource PluginViewModel}}" />
+                                <TextBlock Padding="5"
+                                           Text="{Binding Locale[event_SoundLabel],
+                                                          Source={StaticResource PluginViewModel}}" />
                                 <ComboBox x:Name="TSound"
                                           Width="120"
                                           IsReadOnly="False"
                                           ItemsSource="{Binding SoundFiles,
                                                                 Source={StaticResource PluginViewModel}}" />
-                                <Label VerticalContentAlignment="Center"
-                                       Content="{Binding Locale[event_VolumeLabel],
-                                                         Source={StaticResource PluginViewModel}}" />
-                                <TextBlock Width="50"
+                                <TextBlock Padding="5"
+                                           Text="{Binding Locale[event_VolumeLabel],
+                                                          Source={StaticResource PluginViewModel}}" />
+                                <TextBlock Width="60"
                                            VerticalAlignment="Center"
+                                           Padding="5"
                                            Text="{Binding ElementName=TVolume,
                                                           Path=Value,
                                                           StringFormat=\{0:P2\}}" />
