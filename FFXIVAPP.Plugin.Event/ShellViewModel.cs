@@ -49,7 +49,6 @@ namespace FFXIVAPP.Plugin.Event
         public ShellViewModel()
         {
             Initializer.LoadSettings();
-            Initializer.LoadSoundsAndCache();
             Initializer.LoadLogEvents();
             Settings.Default.PropertyChanged += DefaultOnPropertyChanged;
         }
@@ -58,6 +57,7 @@ namespace FFXIVAPP.Plugin.Event
         {
             ShellView.View.Loaded -= Loaded;
             Initializer.ApplyTheming();
+            Initializer.LoadSoundsAndCache();
         }
 
         private static void DefaultOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)

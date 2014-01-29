@@ -90,7 +90,8 @@
         <GroupBox x:Name="EventOptionsExpander"
                   Grid.Row="0"
                   Margin="3"
-                  Header="Event Options">
+                  Header="{Binding Locale[event_EventOptionsHeader],
+                                   Source={StaticResource PluginViewModel}}">
             <StackPanel>
                 <Grid>
                     <Grid.RowDefinitions>
@@ -121,7 +122,8 @@
                                                 Source={StaticResource PluginViewModel}}" />
                     </DockPanel>
                 </Grid>
-                <Expander Header="Sound Options">
+                <Expander Header="{Binding Locale[event_SoundOptionsHeader],
+                                           Source={StaticResource PluginViewModel}}">
                     <DockPanel Margin="3"
                                LastChildFill="True">
                         <TextBlock Padding="5"
@@ -155,7 +157,8 @@
                                 Value="1" />
                     </DockPanel>
                 </Expander>
-                <Expander Header="Executable Options">
+                <Expander Header="{Binding Locale[event_ExecutableOptionsHeader],
+                                           Source={StaticResource PluginViewModel}}">
                     <DockPanel Margin="3"
                                LastChildFill="True">
                         <TextBlock Padding="5"

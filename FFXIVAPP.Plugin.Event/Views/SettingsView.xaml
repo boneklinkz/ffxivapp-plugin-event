@@ -26,7 +26,8 @@
                                       Source={StaticResource PluginViewModel}}">
                 <ScrollViewer>
                     <StackPanel>
-                        <GroupBox Header="Global Volume">
+                        <GroupBox Header="{Binding Locale[event_GlobalVolumeHeader],
+                                                   Source={StaticResource PluginViewModel}}">
                             <DockPanel Margin="3"
                                        LastChildFill="True">
                                 <TextBlock Padding="5"
