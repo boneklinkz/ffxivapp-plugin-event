@@ -83,7 +83,7 @@ namespace FFXIVAPP.Plugin.Event.Properties
             }
         }
 
-        public static void SetValue(string key, string value, CultureInfo cultureInfo)
+        public void SetValue(string key, string value, CultureInfo cultureInfo)
         {
             try
             {
@@ -119,6 +119,7 @@ namespace FFXIVAPP.Plugin.Event.Properties
             {
                 Logging.Log(LogManager.GetCurrentClassLogger(), "", ex);
             }
+            RaisePropertyChanged(key);
         }
 
         #region Property Bindings (Settings)
